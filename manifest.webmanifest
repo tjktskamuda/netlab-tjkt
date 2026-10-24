@@ -1,0 +1,24 @@
+{
+  "id": "./",
+  "name": "NetLab TJKT",
+  "short_name": "NetLab",
+  "description": "Simulator jaringan untuk praktik TJKT: topologi, kabel, CLI gaya IOS, VLAN, routing, DHCP, DNS, dan Wi-Fi. Bisa dipakai tanpa internet.",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f7f9",
+  "theme_color": "#f5f7f9",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "screenshots/desktop.jpg", "sizes": "2160x1215", "type": "image/jpeg", "form_factor": "wide", "label": "Topologi dua jaringan dengan router di NetLab TJKT" },
+    { "src": "screenshots/mobile.jpg", "sizes": "780x1688", "type": "image/jpeg", "form_factor": "narrow", "label": "NetLab TJKT di layar HP" }
+  ]
+}
