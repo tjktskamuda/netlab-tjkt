@@ -2,7 +2,7 @@
   "id": "./",
   "name": "NetLab TJKT",
   "short_name": "NetLab",
-  "description": "Simulator jaringan untuk praktik TJKT: topologi, kabel, CLI gaya IOS, VLAN, routing, DHCP, DNS, dan Wi-Fi. Bisa dipakai tanpa internet.",
+  "description": "Simulator jaringan untuk praktik TJKT: topologi, kabel, CLI gaya IOS, VLAN, routing, DHCP, DNS, Wi-Fi, dan router MikroTik dengan Winbox. Bisa dipakai tanpa internet.",
   "lang": "id",
   "start_url": "./",
   "scope": "./",

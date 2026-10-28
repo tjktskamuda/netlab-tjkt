@@ -1,19 +1,29 @@
 # NetLab TJKT
 
 Simulator jaringan untuk praktik Teknik Jaringan Komputer dan Telekomunikasi (TJKT) di SMK Negeri 1 Murung Pudak.
-Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi router/switch lewat CLI gaya IOS, lalu uji dengan ping, PDU, dan mode simulasi.
+Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi router/switch lewat CLI gaya IOS atau router MikroTik lewat Winbox, lalu uji dengan ping, PDU, dan mode simulasi.
 
 **Buka aplikasi:** https://tjktskamuda.github.io/netlab-tjkt/
 
 ## Fitur
 
-- Perangkat: Router 2911, Switch 2960, Access Point, PC, Laptop, Smartphone, Server
+- Perangkat: Router 2911, Switch 2960, Router WiFi MikroTik (RB951Ui-2HnD), Access Point, PC, Laptop, Smartphone, Server
 - Kabel straight, crossover, serial DCE, console, dan otomatis, dengan lampu link
 - CLI gaya IOS: VLAN & trunk, router-on-a-stick, static route, RIP, OSPF, DHCP, ACL, Telnet/SSH
 - Desktop PC: IP Configuration (dengan rincian network, broadcast, dan biner), Command Prompt, Kalkulator IP, Web Browser, Wi-Fi, Terminal
 - Server: DHCP, DNS, HTTP
+- MikroTik + simulator Winbox (gaya Winbox v3, RouterOS 6.49):
+  - Quick Set, Interfaces, VLAN, Bridge, Interface List
+  - Wireless: mode AP/station, Virtual AP, Security Profile WPA/WPA2, Access List, Registration, Scanner
+  - IP: Addresses, ARP, DHCP Client/Server/Relay (termasuk DHCP Setup), DNS, Pool, Routes, Services, Neighbors
+  - Firewall Filter, NAT (masquerade, dst-nat/port forward, redirect), Address List, Connections
+  - Hotspot lengkap dengan Hotspot Setup, user/profil, rate-limit, dan halaman login di Web Browser PC
+  - Simple Queue (efeknya terlihat di aplikasi Speed Test), Users, Backup/Restore, Reset Configuration, Log, Safe Mode, Undo
+  - Tools: Ping, Traceroute, IP Scan, Netwatch, Bandwidth Test, Telnet; New Terminal dengan CLI RouterOS
+  - Aplikasi Winbox di Desktop PC: connect lewat MAC (Neighbors) atau IP
+  - Menu lain ditampilkan sesuai Winbox asli dengan keterangan "belum disimulasikan"
 - Mode Simulasi untuk melihat paket berjalan
-- Contoh lab siap pakai, simpan otomatis, ekspor/impor proyek (.json)
+- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah dan Hotspot & Limit Bandwidth), simpan otomatis, ekspor/impor proyek (.json)
 - Bisa dipasang sebagai aplikasi dan dipakai tanpa internet
 
 ## Cara memasang di HP
@@ -50,3 +60,7 @@ Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `
 | `sw.js` | Service worker untuk mode offline |
 | `icons/` | Ikon aplikasi dari logo TJKT |
 | `screenshots/` | Gambar pratinjau di jendela pemasangan |
+
+## Catatan
+
+NetLab adalah simulator untuk latihan di kelas. Tampilan dan perintahnya meniru Cisco IOS serta MikroTik RouterOS/Winbox, tetapi NetLab bukan produk resmi Cisco maupun MikroTik. Cisco, MikroTik, RouterOS, dan Winbox adalah merek dagang milik pemiliknya masing-masing.
