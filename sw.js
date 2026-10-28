@@ -1,5 +1,5 @@
 /* NetLab TJKT service worker: aplikasi tetap bisa dibuka tanpa internet */
-const VERSION = 'netlab-tjkt-v3';
+const VERSION = 'netlab-tjkt-v4';
 const FONTS = 'netlab-fonts';
 const CORE = [
   './', './index.html', './manifest.webmanifest',

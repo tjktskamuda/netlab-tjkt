@@ -26,8 +26,16 @@ Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi ro
 - Server OS (kosong saat ditambahkan), pilih DVD instalasi:
   - **Debian 9**: installer mode teks (bahasa, lokasi, jaringan DHCP/manual, hostname, root & user, partisi, network mirror, tasksel, GRUB), lalu console dengan bash: nano, apt-get dari DVD/mirror, systemctl, ip/ifup, ping, nslookup/dig, curl, ssh, adduser, su/sudo; layanan bind9, isc-dhcp-server, apache2 (virtual host), openssh-server, dan lainnya. PC bisa SSH ke server.
   - **Windows Server 2019**: Windows Setup (edisi, lisensi, disk, password Administrator), layar kunci, desktop; Server Manager, Add Roles and Features, IP statis lewat Network Connections, Windows Firewall, Command Prompt & PowerShell; konsol DHCP (scope, exclusion, reservation, options), DNS Manager (zona, A, CNAME, MX, PTR, forwarder), IIS Manager (situs, binding host name), AD DS (promote domain controller) dan Active Directory Users and Computers
+- Web server:
+  - **Debian**: apache2 (virtual host `ServerName`/`ServerAlias`, `Alias`, a2ensite/a2enconf/a2enmod) atau nginx (`server_name`, `root`, `autoindex`); PHP 7.0 (subset: echo, variabel, `$_SERVER`, fungsi string/tanggal, `phpinfo()`), daftar isi folder, halaman galat 403/404 asli; uji dengan Web Browser PC, `curl`, dan `wget`
+  - **Windows Server**: IIS (situs, binding host name, Default Document, Directory Browsing, galat 403.14/404.0/404.3)
+- Mail server:
+  - **Debian**: Postfix (dialog debconf saat instal dan `dpkg-reconfigure postfix`, `main.cf`, `postconf`, `mailq`, `/var/log/mail.log`), Dovecot IMAP/POP3, `mail`/`sendmail`, uji manual `telnet IP 25`, serta webmail Roundcube (dbconfig dengan MariaDB, `/etc/roundcube/config.inc.php`, Alias Apache)
+  - **Windows Server**: unduh dan instal hMailServer (perlu fitur .NET Framework 3.5), hMailServer Administrator (domain, akun, alias, protokol SMTP/POP3/IMAP, IP Ranges & SMTP AUTH, Diagnostics), aturan Windows Firewall untuk port 25/110/143, fitur Telnet Client
+  - Record MX di DNS (bind9 maupun DNS Manager) dipakai untuk kirim email antar-server dan antar-domain
+  - Aplikasi **Email** di Desktop PC/Laptop (gaya Thunderbird/Outlook: akun IMAP/POP3, SMTP AUTH, kirim, terima, balas, hapus)
 - Mode Simulasi untuk melihat paket berjalan
-- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, dan Windows Server), simpan otomatis, ekspor/impor proyek (.json)
+- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, Windows Server, dan Web & Mail Server), simpan otomatis, ekspor/impor proyek (.json)
 - Bisa dipasang sebagai aplikasi dan dipakai tanpa internet
 
 ## Cara memasang di HP
@@ -53,7 +61,7 @@ Setelah dipasang, buka aplikasi sekali saat online supaya semua berkas tersimpan
 
 ## Memperbarui aplikasi
 
-Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v4`) agar HP siswa ikut memperbarui salinan offline-nya.
+Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v5`) agar HP siswa ikut memperbarui salinan offline-nya.
 
 ## Struktur berkas
 
@@ -67,4 +75,4 @@ Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `
 
 ## Catatan
 
-NetLab adalah simulator untuk latihan di kelas. Tampilan dan perintahnya meniru Cisco IOS, MikroTik RouterOS/Winbox, Debian, dan Windows Server, tetapi NetLab bukan produk resmi Cisco, MikroTik, Debian, maupun Microsoft, dan tidak memuat sistem operasi aslinya. Hanya bagian yang berkaitan dengan jaringan yang benar-benar bekerja; menu lain diberi keterangan "tidak disimulasikan". Internet di dalam NetLab juga tiruan: tidak ada koneksi ke situs sungguhan. Cisco, MikroTik, RouterOS, Winbox, Debian, Microsoft, dan Windows Server adalah merek dagang milik pemiliknya masing-masing.
+NetLab adalah simulator untuk latihan di kelas. Tampilan dan perintahnya meniru Cisco IOS, MikroTik RouterOS/Winbox, Debian, dan Windows Server, tetapi NetLab bukan produk resmi Cisco, MikroTik, Debian, Microsoft, maupun pembuat perangkat lunak server lain yang ditiru, dan tidak memuat sistem operasi aslinya. Hanya bagian yang berkaitan dengan jaringan yang benar-benar bekerja; menu lain diberi keterangan "tidak disimulasikan". Internet di dalam NetLab juga tiruan: tidak ada koneksi ke situs sungguhan. Email juga hanya berjalan di dalam topologi NetLab (tidak ada SSL/TLS dan tidak bisa mengirim ke alamat email sungguhan). Cisco, MikroTik, RouterOS, Winbox, Debian, Microsoft, Windows Server, Postfix, Dovecot, Roundcube, dan hMailServer adalah merek dagang milik pemiliknya masing-masing.
