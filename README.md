@@ -1,13 +1,13 @@
 # NetLab TJKT
 
 Simulator jaringan untuk praktik Teknik Jaringan Komputer dan Telekomunikasi (TJKT) di SMK Negeri 1 Murung Pudak.
-Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi router/switch lewat CLI gaya IOS atau router MikroTik lewat Winbox, lalu uji dengan ping, PDU, dan mode simulasi.
+Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi router/switch lewat CLI gaya IOS atau router MikroTik lewat Winbox, instal Debian 9 atau Windows Server 2019 di server, lalu uji dengan ping, PDU, dan mode simulasi.
 
 **Buka aplikasi:** https://tjktskamuda.github.io/netlab-tjkt/
 
 ## Fitur
 
-- Perangkat: Router 2911, Switch 2960, Router WiFi MikroTik (RB951Ui-2HnD), Access Point, PC, Laptop, Smartphone, Server
+- Perangkat: Router 2911, Switch 2960, Router WiFi MikroTik (RB951Ui-2HnD), Access Point, PC, Laptop, Smartphone, Server, Server OS, Internet (ISP)
 - Kabel straight, crossover, serial DCE, console, dan otomatis, dengan lampu link
 - CLI gaya IOS: VLAN & trunk, router-on-a-stick, static route, RIP, OSPF, DHCP, ACL, Telnet/SSH
 - Desktop PC: IP Configuration (dengan rincian network, broadcast, dan biner), Command Prompt, Kalkulator IP, Web Browser, Wi-Fi, Terminal
@@ -22,8 +22,12 @@ Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi ro
   - Tools: Ping, Traceroute, IP Scan, Netwatch, Bandwidth Test, Telnet; New Terminal dengan CLI RouterOS
   - Aplikasi Winbox di Desktop PC: connect lewat MAC (Neighbors) atau IP
   - Menu lain ditampilkan sesuai Winbox asli dengan keterangan "belum disimulasikan"
+- Internet (ISP): 4 port pelanggan dengan IP publik (DHCP atau statis), DNS publik 8.8.8.8, situs tiruan (google.com, detik.com, deb.debian.org, dll.), paket kecepatan, situs kustom, dan catatan paket IP privat yang ditolak karena belum NAT
+- Server OS (kosong saat ditambahkan), pilih DVD instalasi:
+  - **Debian 9**: installer mode teks (bahasa, lokasi, jaringan DHCP/manual, hostname, root & user, partisi, network mirror, tasksel, GRUB), lalu console dengan bash: nano, apt-get dari DVD/mirror, systemctl, ip/ifup, ping, nslookup/dig, curl, ssh, adduser, su/sudo; layanan bind9, isc-dhcp-server, apache2 (virtual host), openssh-server, dan lainnya. PC bisa SSH ke server.
+  - **Windows Server 2019**: Windows Setup (edisi, lisensi, disk, password Administrator), layar kunci, desktop; Server Manager, Add Roles and Features, IP statis lewat Network Connections, Windows Firewall, Command Prompt & PowerShell; konsol DHCP (scope, exclusion, reservation, options), DNS Manager (zona, A, CNAME, MX, PTR, forwarder), IIS Manager (situs, binding host name), AD DS (promote domain controller) dan Active Directory Users and Computers
 - Mode Simulasi untuk melihat paket berjalan
-- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah dan Hotspot & Limit Bandwidth), simpan otomatis, ekspor/impor proyek (.json)
+- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, dan Windows Server), simpan otomatis, ekspor/impor proyek (.json)
 - Bisa dipasang sebagai aplikasi dan dipakai tanpa internet
 
 ## Cara memasang di HP
@@ -49,7 +53,7 @@ Setelah dipasang, buka aplikasi sekali saat online supaya semua berkas tersimpan
 
 ## Memperbarui aplikasi
 
-Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v2`) agar HP siswa ikut memperbarui salinan offline-nya.
+Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v4`) agar HP siswa ikut memperbarui salinan offline-nya.
 
 ## Struktur berkas
 
@@ -63,4 +67,4 @@ Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `
 
 ## Catatan
 
-NetLab adalah simulator untuk latihan di kelas. Tampilan dan perintahnya meniru Cisco IOS serta MikroTik RouterOS/Winbox, tetapi NetLab bukan produk resmi Cisco maupun MikroTik. Cisco, MikroTik, RouterOS, dan Winbox adalah merek dagang milik pemiliknya masing-masing.
+NetLab adalah simulator untuk latihan di kelas. Tampilan dan perintahnya meniru Cisco IOS, MikroTik RouterOS/Winbox, Debian, dan Windows Server, tetapi NetLab bukan produk resmi Cisco, MikroTik, Debian, maupun Microsoft, dan tidak memuat sistem operasi aslinya. Hanya bagian yang berkaitan dengan jaringan yang benar-benar bekerja; menu lain diberi keterangan "tidak disimulasikan". Internet di dalam NetLab juga tiruan: tidak ada koneksi ke situs sungguhan. Cisco, MikroTik, RouterOS, Winbox, Debian, Microsoft, dan Windows Server adalah merek dagang milik pemiliknya masing-masing.
