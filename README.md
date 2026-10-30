@@ -61,7 +61,7 @@ Setelah dipasang, buka aplikasi sekali saat online supaya semua berkas tersimpan
 
 ## Memperbarui aplikasi
 
-Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v5`) agar HP siswa ikut memperbarui salinan offline-nya.
+Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v6`) agar HP siswa ikut memperbarui salinan offline-nya.
 
 ## Struktur berkas
 

@@ -80,8 +80,8 @@ button { cursor: pointer; }
 .saved-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); display: inline-block; margin-right: 6px; vertical-align: middle; }
 
 /* main */
-.main { display: grid; grid-template-columns: auto 1fr auto; min-height: 0; }
-.rail { display: flex; flex-direction: column; gap: 4px; padding: 8px 6px; background: var(--chrome); border-right: 1px solid var(--line); }
+.main { display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: minmax(0, 1fr); min-height: 0; overflow: hidden; }
+.rail { display: flex; flex-direction: column; gap: 4px; padding: 8px 6px; background: var(--chrome); border-right: 1px solid var(--line); min-height: 0; overflow-y: auto; }
 .tbtn { width: 38px; height: 38px; border-radius: 8px; border: 1px solid transparent; background: none; display: grid; place-items: center; color: var(--ink); position: relative; }
 .tbtn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .tbtn:hover { background: var(--panel-2); }
@@ -171,8 +171,8 @@ details summary { list-style: revert; }
 .cat { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 6px 10px; font-weight: 600; font-size: 13px; text-align: left; min-width: 96px; display: flex; gap: 8px; align-items: center; }
 .cat svg { width: 18px; height: 18px; }
 .cat.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
-.items { display: flex; gap: 6px; padding: 8px 10px; overflow-x: auto; align-items: stretch; min-width: 0; }
-.item { flex: 0 0 auto; width: 86px; border: 1px solid transparent; background: none; border-radius: 10px; padding: 6px 4px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; touch-action: none; }
+.items { display: flex; gap: 6px; padding: 8px 10px; overflow-x: auto; overflow-y: hidden; align-items: stretch; min-width: 0; touch-action: pan-x; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.item { flex: 0 0 auto; width: 86px; border: 1px solid transparent; background: none; border-radius: 10px; padding: 6px 4px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; touch-action: pan-x; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .item:hover { background: var(--panel); border-color: var(--line); }
 .item.on { background: var(--accent-soft); border-color: var(--accent); }
 .item svg { width: 54px; height: 44px; }
@@ -10615,6 +10615,8 @@ function buildChrome() {
   st.addEventListener('pointercancel', e => { ptrs.delete(e.pointerId); pinch = null; drag = null; });
   st.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hideTip(); });
   st.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015)); autosaveView(); }, { passive: false });
+  // mouse wheel scrolls the device/cable palette sideways
+  $('#items').addEventListener('wheel', e => { const el = e.currentTarget; if (el.scrollWidth <= el.clientWidth + 1 || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; el.scrollLeft += e.deltaY; e.preventDefault(); }, { passive: false });
   addEventListener('keydown', e => {
     if (e.target.closest('input,textarea,select')) return;
     if (e.key === 'Escape') { closePop(); if ($('#scrim')) closeModal(); else setTool('select'); }
@@ -10635,19 +10637,23 @@ function drawItems() {
 /* palette: tap = placement mode; drag onto stage = drop there */
 function paletteDrag(btn, type) {
   let st = null, ghost = null;
-  btn.addEventListener('pointerdown', e => { st = { x: e.clientX, y: e.clientY, id: e.pointerId, moved: false }; btn.setPointerCapture(e.pointerId); });
+  btn.addEventListener('pointerdown', e => { st = { x: e.clientX, y: e.clientY, id: e.pointerId, moved: false, far: false }; if (e.pointerType === 'mouse') btn.setPointerCapture(e.pointerId); });
   btn.addEventListener('pointermove', e => {
     if (!st) return;
-    if (!st.moved && Math.hypot(e.clientX - st.x, e.clientY - st.y) > 10 && (e.pointerType === 'mouse' || Math.abs(e.clientY - st.y) > Math.abs(e.clientX - st.x))) {
+    const dist = Math.hypot(e.clientX - st.x, e.clientY - st.y);
+    if (dist > 10) st.far = true;
+    // touch: a sideways swipe scrolls the palette (browser pans and cancels this pointer); only an upward/vertical drag picks the device up
+    if (!st.moved && dist > 10 && (e.pointerType === 'mouse' || Math.abs(e.clientY - st.y) > Math.abs(e.clientX - st.x))) {
+      if (e.pointerType !== 'mouse') { try { btn.setPointerCapture(e.pointerId); } catch (_) {} }
       st.moved = true; ghost = devIcon(type); ghost.setAttribute('style', 'position:fixed;width:60px;height:50px;pointer-events:none;z-index:70;opacity:.85'); document.body.append(ghost);
     }
     if (ghost) { ghost.style.left = (e.clientX - 30) + 'px'; ghost.style.top = (e.clientY - 25) + 'px'; }
   });
   const end = e => {
     if (!st) return;
-    const moved = st.moved; st = null;
+    const moved = st.moved, far = st.far; st = null;
     if (ghost) { ghost.remove(); ghost = null; }
-    if (!moved) { setTool(UI.tool === 'place:' + type ? 'select' : 'place:' + type); return; }
+    if (!moved) { if (!far) setTool(UI.tool === 'place:' + type ? 'select' : 'place:' + type); return; }
     const r = stage().getBoundingClientRect();
     if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) {
       const w = toWorld(e.clientX, e.clientY);
