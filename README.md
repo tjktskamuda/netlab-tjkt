@@ -1,13 +1,13 @@
 # NetLab TJKT
 
 Simulator jaringan untuk praktik Teknik Jaringan Komputer dan Telekomunikasi (TJKT) di SMK Negeri 1 Murung Pudak.
-Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi router/switch lewat CLI gaya IOS atau router MikroTik lewat Winbox, instal Debian 9 atau Windows Server 2019 di server, lalu uji dengan ping, PDU, dan mode simulasi.
+Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi router/switch lewat CLI gaya IOS atau router MikroTik lewat Winbox, instal Debian 9 atau Windows Server 2019 di server, instal Windows 11 / Ubuntu 24.04 (bisa dual boot) di PC dan laptop, lalu uji dengan ping, PDU, dan mode simulasi.
 
 **Buka aplikasi:** https://tjktskamuda.github.io/netlab-tjkt/
 
 ## Fitur
 
-- Perangkat: Router 2911, Switch 2960, Router WiFi MikroTik (RB951Ui-2HnD), Access Point, PC, Laptop, Smartphone, Server, Server OS, Internet (ISP)
+- Perangkat: Router 2911, Switch 2960, Router WiFi MikroTik (RB951Ui-2HnD), Access Point, PC, Laptop, Smartphone, Server, Server OS, PC OS, Laptop OS, Internet (ISP)
 - Kabel straight, crossover, serial DCE, console, dan otomatis, dengan lampu link
 - CLI gaya IOS: VLAN & trunk, router-on-a-stick, static route, RIP, OSPF, DHCP, ACL, Telnet/SSH
 - Desktop PC: IP Configuration (dengan rincian network, broadcast, dan biner), Command Prompt, Kalkulator IP, Web Browser, Wi-Fi, Terminal
@@ -34,8 +34,17 @@ Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi ro
   - **Windows Server**: unduh dan instal hMailServer (perlu fitur .NET Framework 3.5), hMailServer Administrator (domain, akun, alias, protokol SMTP/POP3/IMAP, IP Ranges & SMTP AUTH, Diagnostics), aturan Windows Firewall untuk port 25/110/143, fitur Telnet Client
   - Record MX di DNS (bind9 maupun DNS Manager) dipakai untuk kirim email antar-server dan antar-domain
   - Aplikasi **Email** di Desktop PC/Laptop (gaya Thunderbird/Outlook: akun IMAP/POP3, SMTP AUTH, kirim, terima, balas, hapus)
+- PC OS & Laptop OS (disk NVMe kosong, firmware UEFI dengan Secure Boot dan TPM 2.0), colokkan flashdisk installer:
+  - Layar POST, **UEFI Setup** (F2: info hardware, Secure Boot, TPM, Wi-Fi, USB boot, urutan boot), **Boot Menu** (F12), "Boot Device Not Found", GRUB
+  - **Windows 11 24H2**: Windows Setup (bahasa, keyboard, setup option, product key, edisi Home/Pro/Education, lisensi, pilih/buat/hapus/format partisi, cek TPM 2.0), lalu OOBE (region, keyboard, jaringan & Wi-Fi, nama perangkat, akun lokal, password, pertanyaan keamanan, privasi); layar kunci, sign-in (lokal dan domain), desktop dengan taskbar tengah, Start, Quick Settings, Win+X, UAC
+  - Aplikasi Windows 11: Settings (About/rename, Network & internet dengan Edit IP/DNS, Wi-Fi, Accounts, Access work or school, Windows Update), Terminal (PowerShell & Command Prompt: `ipconfig /all`, `netsh`, `nslookup`, `ssh user@host`, `curl`, cmdlet `Get-NetIPAddress`, `Test-NetConnection`, `Resolve-DnsName`, `Add-Computer`, dll.), Microsoft Edge, Outlook, File Explorer, Notepad, Disk Management (Shrink/Extend/New/Delete/Format), Network Connections, System Properties, Windows Defender Firewall, Control Panel, Run
+  - **Join domain** Active Directory Windows Server (Windows 11 Pro/Education), login `DOMAIN\user`, password wajib ganti, akun cache; komputer tampil di ADUC
+  - **Ubuntu 24.04.1 LTS**: GRUB flashdisk, sesi live, installer gaya baru (bahasa, aksesibilitas, keyboard, internet/Wi-Fi, interaktif, aplikasi, driver, *Install alongside Windows* dengan penggeser ukuran, *Erase disk*, *Manual partitioning*, akun, zona waktu, review, slideshow + log), lalu GDM, desktop GNOME 46 (top bar, dock, Quick Settings, menu daya, kunci layar)
+  - Aplikasi Ubuntu: Terminal (bash + `ip`, `nmcli`, `resolvectl`, `netplan`, `lsblk`, `fdisk -l`, `efibootmgr`, `update-grub`, `os-prober`, apt), Settings (Wi-Fi, Network dengan IPv4 Manual/DNS, Appearance, About/rename, Date & Time), Files, Text Editor, Firefox, Thunderbird, Disks
+  - **Dual boot** kedua urutan (Windows dulu lalu Ubuntu, atau sebaliknya), partisi EFI bersama, urutan boot UEFI (NVRAM), os-prober & `GRUB_DISABLE_OS_PROBER`
+  - Bekerja sebagai klien: DHCP/IP statis lewat kabel atau Wi-Fi (WPA2), DNS, web, email, SSH, Windows Firewall memblokir ping masuk
 - Mode Simulasi untuk melihat paket berjalan
-- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, Windows Server, dan Web & Mail Server), simpan otomatis, ekspor/impor proyek (.json)
+- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, Windows Server, Web & Mail Server, dan Klien Windows 11 & Ubuntu (Dual Boot)), simpan otomatis, ekspor/impor proyek (.json)
 - Bisa dipasang sebagai aplikasi dan dipakai tanpa internet
 
 ## Cara memasang di HP
@@ -61,7 +70,7 @@ Setelah dipasang, buka aplikasi sekali saat online supaya semua berkas tersimpan
 
 ## Memperbarui aplikasi
 
-Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v6`) agar HP siswa ikut memperbarui salinan offline-nya.
+Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v7`) agar HP siswa ikut memperbarui salinan offline-nya.
 
 ## Struktur berkas
 
