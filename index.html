@@ -883,10 +883,10 @@ textarea.inp { font-family: var(--f-mono); font-size: 12.5px; resize: vertical; 
 .uefi-dlg .bt button:focus-visible { outline: 2px solid #ffd27f; }
 @media (max-width: 640px) { .uefi-help { display: none; } }
 /* GRUB */
-.grub { flex: 1; background: #000; color: #c8c8c8; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; font: 14px/1.6 'JetBrains Mono', Consolas, monospace; outline: none; overflow: auto; }
+.grub { flex: 1; background: #000; color: #c8c8c8; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: max(16px, 5%) 16px 16px; font: 14px/1.6 'JetBrains Mono', Consolas, monospace; outline: none; overflow: auto; }
 .grub-t { margin-bottom: 10px; }
-.grub-box { border: 1px solid #c8c8c8; width: min(680px, 100%); min-height: 40%; padding: 4px 0; }
-.grub-box button { display: block; width: 100%; text-align: left; border: 0; background: none; color: #c8c8c8; font: inherit; padding: 0 10px; cursor: pointer; white-space: pre; overflow: hidden; text-overflow: ellipsis; }
+.grub-box { border: 1px solid #c8c8c8; width: min(680px, 100%); min-height: 40%; padding: 4px 0; flex: none; }
+.grub-box button { display: block; width: 100%; min-height: 24px; touch-action: manipulation; text-align: left; border: 0; background: none; color: #c8c8c8; font: inherit; padding: 0 10px; cursor: pointer; white-space: pre; overflow: hidden; text-overflow: ellipsis; }
 .grub-box button.on { background: #c8c8c8; color: #000; }
 .grub-f { white-space: pre-wrap; width: min(680px, 100%); margin-top: 12px; font-size: 13px; }
 .grub-err { color: #ddd; margin: 0; align-self: flex-start; white-space: pre-wrap; }
@@ -1615,6 +1615,31 @@ textarea.inp { font-family: var(--f-mono); font-size: 12.5px; resize: vertical; 
 .w11.dark .w11-start button, .w11.dark .w11-qs button, .w11.dark .w11-winx button, .w11.dark .w11-cal button { color: #fff; }
 .w11.dark .sm-search { background: #2d2d2d; border-color: #444; } .w11.dark .wn.w11 .sm-search input, .w11.dark .sm-search input { color: #fff; }
 .w11.dark .sm-hd .pl { background: #3a3a3a; border-color: #555; color: #fff; }
+/* Windows 11 dark mode (Settings follows the system theme like the real app) */
+.w11.dark { --acc: #4cc2ff; --fg: #ffffff; }
+.w11.dark .w11b.pri, .w11.dark .qs-t.on, .w11.dark .cal-g span.on, .w11.dark .wbtn.pri { color: #000; }
+.w11.dark .w11b.pri:hover { background: #6bcfff; }
+.w11.dark .w11-set .ww-b, .w11.dark .st11 { background: #202020; color: #fff; }
+.w11.dark .st-card { background: #2b2b2b; border-color: #1d1d1d; }
+.w11.dark .st-row + .st-row, .w11.dark .st-links { border-top-color: #3a3a3a; }
+.w11.dark .st-row.link:hover { background: #323232; }
+.w11.dark .st-row .tx small, .w11.dark .st-kv span:nth-child(odd), .w11.dark .st-user small, .w11.dark .st-hero small, .w11.dark .st-net small, .w11.dark .st-radio small, .w11.dark .st-links > span, .w11.dark .st11 .muted { color: #c5c5c5; }
+.w11.dark .st-h .cr { color: #c5c5c5; } .w11.dark .st-h .cr:hover { color: #fff; }
+.w11.dark .st-nav > button:hover { background: rgba(255,255,255,.06); } .w11.dark .st-nav > button.on { background: rgba(255,255,255,.09); }
+.w11.dark .st-search { background: #2d2d2d; border-color: #444; } .w11.dark .wn.w11 .st-search input { color: #fff; }
+.w11.dark .st11 .w11b:not(.pri) { background: #373737; border-color: #444; color: #fff; }
+.w11.dark .st11 select.w11i, .wn.w11.dark .st11 select.w11i { background: #2d2d2d; color: #fff; border-color: #444; }
+.w11.dark .st-user .av { background: #3b4756; color: #c9d6e6; }
+.w11.dark .st-warn { background: #433519; color: #ffd27f; }
+.w11.dark .w11-start .sm-row .main small, .w11.dark .sm-rec, .w11.dark .cal-n { color: #bbb; }
+.w11.dark .sm-row:hover, .w11.dark .sm-row.best { background: rgba(255,255,255,.07); }
+.w11.dark .qs-ft { border-top-color: rgba(255,255,255,.1); }
+.w11.dark .qs-net .nm small { color: #bbb; }
+.w11.dark .w11-winx hr { border-top-color: rgba(255,255,255,.12); }
+.w11.dark .w11-menu { background: rgba(44,44,44,.98); border-color: #444; color: #fff; }
+.w11.dark .w11-menu button:hover, .w11.dark .w11-menu button:focus-visible { background: rgba(255,255,255,.08); }
+/* scroll containers: children keep their natural height instead of shrinking (and clipping) */
+.st-main > *, .gs-main > *, .ins-main > *, .ins-body > *, .dk-main > *, .cp-main > *, .ws-in > *, .ws-form > *, .oobe-body > *, .oobe-main > *, .nf-main > *, .qs-wl > *, .ug-qs > *, .w11-qs > *, .smb > *, .uefi-list > *, .cos-info > * { flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -8679,7 +8704,7 @@ COS.ubuNetUp = function (P, d) {
 COS.netUp = function (P, d) { const o = d.os; if (!o || o.stage !== 'ready') return; if (o.kind === 'windows') COS.winApplyNet(P, d); else COS.ubuNetUp(P, d); };
 /* connect to a Wi-Fi network: returns {ok} or {err:'auth'|'range'|...} */
 COS.wifiConnect = function (P, d, ssid, key, remember) {
-  const o = d.os; if (!d.ports.wlan0 || !o || o.stage !== 'ready') return { err: 'nonic' };
+  const o = d.os; if (!COS.hasWifi(d) || !o || o.stage !== 'ready') return { err: 'nonic' };
   const scan = NL.wifiScan(P, d).find(x => x.ssid === ssid);
   if (!scan) return { err: 'range' };
   const cur = { ssid, auth: scan.auth, key: scan.auth === 'open' ? '' : (key || '') };
@@ -8911,13 +8936,13 @@ function ipAddrLines(P, d) {
     if (up) L.push('    inet6 fe80::' + mac(p).slice(9).replace(/:/g, '').replace(/(....)/, '$1:') + '/64 scope link noprefixroute ', '       valid_lft forever preferred_lft forever');
   };
   one(2, hw.ifn, 'eth0', o.net);
-  if (d.ports.wlan0) one(3, hw.wifn, 'wlan0', o.wnet);
+  if (COS.hasWifi(d)) one(3, hw.wifn, 'wlan0', o.wnet);
   return L;
 }
 function routeLines(P, d) {
   const hw = HW[d.type]; const L = [];
   const add = (ifn, port, net, metric) => { const p = d.ports[port]; if (!p.ip || !NL.portUp(P, d, port)) return; if (net && net.gw) L.push('default via ' + net.gw + ' dev ' + ifn + ' proto ' + (net.mode === 'dhcp' ? 'dhcp' : 'static') + ' metric ' + metric); L.push(n2ip(netOf(ip2n(p.ip), ip2n(p.mask))) + '/' + maskLen(ip2n(p.mask)) + ' dev ' + ifn + ' proto kernel scope link src ' + p.ip + ' metric ' + metric); };
-  add(hw.ifn, 'eth0', d.os.net, 100); if (d.ports.wlan0) add(hw.wifn, 'wlan0', d.os.wnet, 600);
+  add(hw.ifn, 'eth0', d.os.net, 100); if (COS.hasWifi(d)) add(hw.wifn, 'wlan0', d.os.wnet, 600);
   return L;
 }
 const NOTFOUND = { ifconfig: 'net-tools', netstat: 'net-tools', route: 'net-tools', arp: 'net-tools', traceroute: 'traceroute', telnet: 'telnet', curl: 'curl', sshd: 'openssh-server', ftp: 'ftp', nmap: 'nmap', php: 'php8.3-cli', mysql: 'mysql-client-core-8.0', 'apache2ctl': 'apache2', smbclient: 'smbclient', whois: 'whois', 'neofetch': 'neofetch' };
@@ -8962,7 +8987,7 @@ COS.shellHook = function (X, cmd, a) {
       const hw = HW[d.type]; const dns = COS.ubuDns(d);
       w('Global', '         Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported', '  resolv.conf mode: stub', '', 'Link 2 (' + hw.ifn + ')', '    Current Scopes: ' + (d.ports.eth0.ip ? 'DNS' : 'none'), '         Protocols: +DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported');
       if (d.ports.eth0.ip && dns.length) w('Current DNS Server: ' + dns[0], '       DNS Servers: ' + dns.join(' '));
-      if (d.ports.wlan0) { w('', 'Link 3 (' + hw.wifn + ')', '    Current Scopes: ' + (d.ports.wlan0.ip ? 'DNS' : 'none')); if (d.ports.wlan0.ip) w('       DNS Servers: ' + COS.dnsFor(d, 'wifi').join(' ')); }
+      if (COS.hasWifi(d)) { w('', 'Link 3 (' + hw.wifn + ')', '    Current Scopes: ' + (d.ports.wlan0.ip ? 'DNS' : 'none')); if (d.ports.wlan0.ip) w('       DNS Servers: ' + COS.dnsFor(d, 'wifi').join(' ')); }
       return ok;
     }
     case 'lsblk': lsblkLines(d).forEach(x => w(x)); return ok;
@@ -9020,19 +9045,19 @@ function nmcli(X, a) {
   const { d, P, w, isRoot } = X; const o = d.os; const nm = o.nm; const hw = HW[d.type];
   const sub = a[0] || '';
   const L = COS.linkInfo(P, d);
-  if (!sub || sub === 'general') { w('STATE      CONNECTIVITY  WIFI-HW  WIFI     WWAN-HW  WWAN    ', (d.ports.eth0.ip || (d.ports.wlan0 && d.ports.wlan0.ip) ? 'connected' : 'disconnected').padEnd(11) + (COS.connectivity(P, d) === 'internet' ? 'full' : d.ports.eth0.ip ? 'limited' : 'none').padEnd(14) + 'enabled  ' + (nm.wifi.on ? 'enabled  ' : 'disabled ') + 'missing  enabled '); return { code: 0 }; }
+  if (!sub || sub === 'general') { w('STATE      CONNECTIVITY  WIFI-HW  WIFI     WWAN-HW  WWAN    ', (d.ports.eth0.ip || (d.ports.wlan0 && d.ports.wlan0.ip) ? 'connected' : 'disconnected').padEnd(11) + (COS.connectivity(P, d) === 'internet' ? 'full' : d.ports.eth0.ip ? 'limited' : 'none').padEnd(14) + (COS.hasWifi(d) ? 'enabled  ' : 'missing  ') + (nm.wifi.on ? 'enabled  ' : 'disabled ') + 'missing  enabled '); return { code: 0 }; }
   if (/^d(e(v(i(c(e)?)?)?)?)?$/.test(sub)) {
     const act = a[1] || 'status';
     if (act === 'status') {
       w('DEVICE  TYPE      STATE                   CONNECTION         ');
       w(hw.ifn.padEnd(8) + 'ethernet  ' + (L.eth.up ? (d.ports.eth0.ip || (o.net && o.net.mode === 'dhcp') ? 'connected' : 'connected') : 'unavailable').padEnd(24) + (L.eth.up ? nm.eth.name : '--'));
-      if (d.ports.wlan0) w(hw.wifn.padEnd(8) + 'wifi      ' + (L.wifi.assoc ? 'connected' : nm.wifi.on ? 'disconnected' : 'unavailable').padEnd(24) + (L.wifi.assoc ? L.wifi.cur.ssid : '--'));
+      if (COS.hasWifi(d)) w(hw.wifn.padEnd(8) + 'wifi      ' + (L.wifi.assoc ? 'connected' : nm.wifi.on ? 'disconnected' : 'unavailable').padEnd(24) + (L.wifi.assoc ? L.wifi.cur.ssid : '--'));
       w('lo      loopback  connected (externally)  lo                 ');
       return { code: 0 };
     }
     if (act === 'show') { const p = d.ports.eth0; w('GENERAL.DEVICE:                         ' + hw.ifn, 'GENERAL.TYPE:                           ethernet', 'GENERAL.HWADDR:                         ' + OS.macColon(p.mac).toUpperCase(), 'GENERAL.STATE:                          ' + (L.eth.up ? '100 (connected)' : '20 (unavailable)'), 'IP4.ADDRESS[1]:                         ' + (p.ip ? p.ip + '/' + maskLen(ip2n(p.mask)) : '--'), 'IP4.GATEWAY:                            ' + ((o.net && o.net.gw) || '--'), 'IP4.DNS[1]:                             ' + (COS.dnsFor(d, 'eth')[0] || '--')); return { code: 0 }; }
     if (act === 'wifi') {
-      if (!d.ports.wlan0) { w('Error: No Wi-Fi device found.'); return { code: 10 }; }
+      if (!COS.hasWifi(d)) { w('Error: No Wi-Fi device found.'); return { code: 10 }; }
       const op = a[2] || 'list';
       if (op === 'list') { w('IN-USE  BSSID              SSID            MODE   CHAN  RATE        SIGNAL  BARS  SECURITY  '); for (const s of NL.wifiScan(P, d)) w(((L.wifi.cur && L.wifi.cur.ssid === s.ssid && L.wifi.assoc) ? '*' : ' ').padEnd(8) + OS.macColon(s.mac || '').toUpperCase().padEnd(19) + s.ssid.padEnd(16) + 'Infra  ' + String(s.channel || 6).padEnd(6) + '130 Mbit/s  ' + String(s.sig * 24).padEnd(8) + ['▂___', '▂▄__', '▂▄▆_', '▂▄▆█'][s.sig - 1].padEnd(6) + (s.auth === 'open' ? '--' : s.auth === 'wep' ? 'WEP' : 'WPA2')); return { code: 0 }; }
       if (op === 'connect') { const ssid = a[3]; const pi = a.indexOf('password'); const key = pi >= 0 ? a[pi + 1] : ''; if (!ssid) { w('Error: SSID or BSSID is missing.'); return { code: 2 }; } const r = COS.wifiConnect(P, d, ssid, key); if (r.ok) { w('Device \'' + hw.wifn + '\' successfully activated with \'' + uuid(ssid) + '\'.'); NL.broadcast(P); return { code: 0 }; } w(r.err === 'range' ? 'Error: No network with SSID \'' + ssid + '\' found.' : 'Error: Connection activation failed: Secrets were required, but not provided.'); return { code: 4 }; }
@@ -10621,7 +10646,7 @@ const SAMPLES = [
     },
   },
   {
-    id: 'clientos', title: 'Klien Windows 11 & Ubuntu (Dual Boot)', level: 'Menengah', ready: true,
+    id: 'clientos', title: 'Klien Windows 11 & Ubuntu (Dual Boot)', level: 'Menengah', ready: false,
     desc: 'Windows Server 2019 sudah menjadi domain controller tjkt.local (AD DS, DNS, DHCP, IIS) dan ada Access Point Wi-Fi. PC OS dan Laptop OS masih kosong: siswa menginstal Windows 11 dan Ubuntu 24.04 (dual boot), lalu memakainya sebagai klien jaringan dan join domain.',
     build() {
       const b = B(); const P = b.P; const OS = NL.OS; const WIN = OS.WIN;
@@ -14949,7 +14974,8 @@ WX.openIPv4 = function (D) {
   const d1 = field(id + 'd1', v.dnsAuto ? '' : v.dns1, { inputmode: 'decimal' }), d2 = field(id + 'd2', v.dnsAuto ? '' : v.dns2, { inputmode: 'decimal' });
   const sync = () => { const s = rIpS.checked; [ip, mk, gw].forEach(x => { x.disabled = !s; }); if (s) { rDS.checked = true; rDA.disabled = true; } else rDA.disabled = false; [d1, d2].forEach(x => { x.disabled = !rDS.checked; }); };
   [rIpA, rIpS, rDA, rDS].forEach(x => x.addEventListener('change', sync));
-  mk.addEventListener('focus', () => { if (!mk.value && ip2n(ip.value) != null) mk.value = classMask(ip.value); });
+  ip.addEventListener('blur', () => { if (!mk.value.trim() && ip2n(ip.value.trim()) != null) mk.value = classMask(ip.value.trim()); });
+  mk.addEventListener('focus', () => setTimeout(() => { if (document.activeElement === mk) mk.select(); }, 0));
   sync();
   const body = h('div', { style: 'display:flex;flex-direction:column;gap:8px' },
     h('p', { style: 'margin:0;font-size:12.5px', text: 'You can get IP settings assigned automatically if your network supports this capability. Otherwise, you need to ask your network administrator for the appropriate IP settings.' }),
@@ -16197,15 +16223,23 @@ CUI.spinner = cls => { const s = h('div', { class: 'w11-dots ' + (cls || ''), ro
 /* ---------- what the screen should show ---------- */
 function rt(d) {
   let r = RT.get(d.id);
+  if (r && r.dev && r.dev !== d) r = null;   // same id in a newly loaded project: start fresh
   const m = d.mach;
   if (!r || (!m.power && r.phase !== 'off') || (m.running && r.phase !== 'os' && !r.keep)) {
     r = !m.power ? { phase: 'off' } : m.running ? { phase: 'os', k: m.running } : { phase: 'post' };
-    r.n = (RT.get(d.id) || {}).n || 0; RT.set(d.id, r);
+    r.n = (RT.get(d.id) || {}).n || 0; r.dev = d; RT.set(d.id, r);
   }
   return r;
 }
 CUI.rt = rt;
-function setPhase(d, phase, arg) { const old = RT.get(d.id) || {}; const r = Object.assign({ phase, n: (old.n || 0) + 1 }, arg || {}); RT.set(d.id, r); return r; }
+/* a restart / shutdown that was in progress when the screen was closed: finish it without the animation */
+CUI.finishPower = function (d, kind) {
+  const P = Pj(); COS.stopOS(P, d);
+  if (kind === 'off') { COS.powerOff(P, d); setPhase(d, 'off'); }
+  else setPhase(d, kind === 'halt' ? 'halt' : 'post');
+  commit(); L().changed();
+};
+function setPhase(d, phase, arg) { const old = RT.get(d.id) || {}; const r = Object.assign({ phase, n: (old.n || 0) + 1 }, arg || {}, { dev: d }); RT.set(d.id, r); return r; }
 
 /* engine-level transitions (used when no screen is open, e.g. "sudo reboot" over SSH) */
 function bootTarget(d) {
@@ -16507,34 +16541,43 @@ function grub(ctx, usb) {
   screen.append(box);
   const ADV = [{ id: 'ubuntu', title: 'Ubuntu, with Linux ' + COS.UBU.kernel }, { id: 'recovery', title: 'Ubuntu, with Linux ' + COS.UBU.kernel + ' (recovery mode)' }];
   function cur() { return sub || menu.items; }
+  let btns = [], foot = null;
   function draw() {
-    box.textContent = '';
-    const list = h('div', { class: 'grub-box' });
-    cur().forEach((it, i) => list.append(h('button', { type: 'button', class: i === sel ? 'on' : '', onclick: () => { stop(); sel = i; pick(it); }, onmouseenter: () => { stop(); sel = i; draw(); }, text: (i === sel ? '*' : ' ') + it.title })));
-    box.append(h('div', { class: 'grub-t', text: 'GNU GRUB  version 2.12' }), list,
-      h('div', { class: 'grub-f', text: '     Use the ▲ and ▼ keys to select which entry is highlighted.\n     Press enter to boot the selected OS, `e\' to edit the commands\n     before booting or `c\' for a command-line.' + (sub ? ' ESC to return\n     previous menu.' : '') + (ticking && !sub ? '\n   The highlighted entry will be executed automatically in ' + left + 's.' : '') }));
+    box.textContent = ''; btns = [];
+    const list = h('div', { class: 'grub-box', role: 'menu' });
+    cur().forEach((it, i) => { const b = h('button', { type: 'button', role: 'menuitem', onclick: () => { stop(); mark(i); pick(it); }, onmouseenter: () => { stop(); mark(i); } }); btns.push(b); list.append(b); });
+    foot = h('div', { class: 'grub-f' });
+    box.append(h('div', { class: 'grub-t', text: 'GNU GRUB  version 2.12' }), list, foot);
+    mark(sel); updFoot();
   }
-  function stop() { if (ticking) { ticking = false; draw(); } }
+  /* highlight without rebuilding the menu (rebuilding under the pointer would swallow mouse clicks) */
+  function mark(i) { sel = i; btns.forEach((b, j) => { b.classList.toggle('on', j === sel); b.textContent = (j === sel ? '*' : ' ') + cur()[j].title; }); }
+  function updFoot() { if (foot) foot.textContent = '     Use the \u25b2 and \u25bc keys to select which entry is highlighted.\n     Press enter to boot the selected OS, `e\' to edit the commands\n     before booting or `c\' for a command-line.' + (sub ? ' ESC to return\n     previous menu.' : '') + (ticking && !sub ? '\n   The highlighted entry will be executed automatically in ' + left + 's.' : ''); }
+  function stop() { if (ticking) { ticking = false; updFoot(); } }
   function pick(it) {
     T.clear();
     if (it.id === 'adv') { sub = ADV; sel = 0; draw(); return; }
     if (it.id === 'fw') { ctx.go('bios'); return; }
     if (it.id === 'next') { ctx.autoBootSkipUsb ? ctx.autoBootSkipUsb() : ctx.autoBoot(); return; }
     if (it.id === 'live') { ctx.go('liveboot'); return; }
-    if (it.id === 'win') { ctx.go('wbm'); return; }
-    if (it.id === 'broken') { box.textContent = ''; box.append(h('pre', { class: 'grub-err', text: 'error: no such device: ' + COS.uuid(d.id + 'gone').slice(0, 9).toUpperCase() + '.\nerror: disk `hd0,gpt1\' not found.\n\nPress any key to continue...' })); T.after(60000, () => {}); waitKey = () => { waitKey = null; sel = 0; ticking = false; draw(); }; return; }
+    if (it.id === 'win') { ctx.go(COS.inst(d, 'windows') ? 'wbm' : 'winerr'); return; }
+    if (it.id === 'broken') {
+      // Windows Boot Manager is still on the (shared) EFI partition but its Windows partition is gone -> its own recovery error
+      const u = COS.inst(d, 'ubuntu'); if (u && COS.findPart(d, u.parts.esp)) { ctx.go('winerr'); return; }
+      box.textContent = ''; box.append(h('pre', { class: 'grub-err', text: 'error: no such device: ' + COS.uuid(d.id + 'gone').slice(0, 9).toUpperCase() + '.\nerror: disk `hd0,gpt1\' not found.\n\nPress any key to continue...' })); waitKey = () => { waitKey = null; sel = 0; ticking = false; draw(); }; return;
+    }
     if (it.id === 'recovery') { L().toast('NetLab: recovery mode tidak disimulasikan, Ubuntu dijalankan normal.'); }
     ctx.go('ububoot');
   }
   let waitKey = null;
   draw();
-  T.every(1000, () => { if (!ticking) return; left--; if (left <= 0) { ticking = false; pick(cur()[sel]); } else draw(); });
+  T.every(1000, () => { if (!ticking) return; left--; if (left <= 0) { ticking = false; pick(cur()[sel]); } else updFoot(); });
   return {
     focus: () => box.focus({ preventScroll: true }),
     key: e => {
       if (waitKey) { e.preventDefault(); waitKey(); return; }
       const n = cur().length;
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); stop(); sel = (sel + (e.key === 'ArrowDown' ? 1 : n - 1)) % n; draw(); }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); stop(); mark((sel + (e.key === 'ArrowDown' ? 1 : n - 1)) % n); }
       else if (e.key === 'Enter') { e.preventDefault(); pick(cur()[sel]); }
       else if (e.key === 'Escape' && sub) { e.preventDefault(); sub = null; sel = 1; draw(); }
       else if (e.key === 'e' || e.key === 'c') { e.preventDefault(); stop(); L().toast('NetLab: editor/command-line GRUB tidak disimulasikan.'); }
@@ -16553,7 +16596,7 @@ function osLoad(ctx, k) {
   const ms = k === 'live' ? 2600 : k === 'windows' ? 2000 : 1800;
   T.after(ms, () => {
     const o = COS.startOS(P, d, k);
-    if (!o) { ctx.go('noboot'); return; }
+    if (!o) { ctx.go(k === 'windows' ? 'winerr' : 'noboot'); return; }
     commit(); ctx.go('os', { k, fresh: true });
   });
   return null;
@@ -16619,7 +16662,7 @@ CUI.infoPane = function (d) {
     const bl = COS.bootList(d);
     b.append(h('div', { class: 'box' }, h('div', { class: 'cap', text: 'Urutan boot UEFI (NVRAM)' }), bl.length ? h('ol', { class: 'cos-boot' }, ...bl.map(x => h('li', null, x.label, x.ok ? null : h('span', { class: 'muted', text: ' (tidak bisa boot)' })))) : h('div', { class: 'muted', text: 'Belum ada entri boot.' }), h('div', { class: 'muted', style: 'font-size:12.5px;margin-top:4px', text: 'Ubah di UEFI Setup (F2 saat logo muncul) → Boot, atau pilih sekali jalan lewat F12 Boot Menu.' })));
     // network
-    const nic = (port, nm) => { const p = d.ports[port]; if (!p) return null; const up = NL.portUp(P, d, port); return h('div', { class: 'fgrid' }, ...row(nm, (p.mtname || port) + ' · MAC ' + p.mac.toUpperCase()), ...row('Link', port === 'wlan0' ? (p.shut ? 'tidak terhubung' : 'SSID ' + p.ssid + (up ? ' (terhubung)' : ' (gagal)')) : up ? 'Terhubung 1 Gbps' : 'Kabel belum tersambung'), ...row('IPv4', p.ip ? p.ip + ' / ' + p.mask + (p.dhcp ? ' (DHCP)' : ' (statis)') : '—')); };
+    const nic = (port, nm) => { const p = d.ports[port]; if (!p) return null; if (port === 'wlan0' && !COS.hasWifi(d)) return h('div', { class: 'fgrid' }, ...row(nm, 'Dinonaktifkan di UEFI Setup (Advanced → Wireless LAN)')); const up = NL.portUp(P, d, port); return h('div', { class: 'fgrid' }, ...row(nm, (p.mtname || port) + ' · MAC ' + p.mac.toUpperCase()), ...row('Link', port === 'wlan0' ? (p.shut ? 'tidak terhubung' : 'SSID ' + p.ssid + (up ? ' (terhubung)' : ' (gagal)')) : up ? 'Terhubung 1 Gbps' : 'Kabel belum tersambung'), ...row('IPv4', p.ip ? p.ip + ' / ' + p.mask + (p.dhcp ? ' (DHCP)' : ' (statis)') : '—')); };
     b.append(h('div', { class: 'box' }, h('div', { class: 'cap', text: 'Jaringan' }), nic('eth0', 'Ethernet'), nic('wlan0', 'Wi-Fi'), h('div', { class: 'fgrid' }, ...row('Gateway', d.host.gw || '—'), ...row('DNS', d.host.dns || '—'))));
     b.append(h('div', { class: 'box' }, h('div', { class: 'cap', text: 'Panduan singkat' }), guide()));
   }
@@ -16845,7 +16888,7 @@ W11.setup = function (ctx) {
     if (!rows.length) rows.push({ gap: true, start: 1, size: d.mach.disk.size - 2, name: 'Disk 0 Unallocated Space', type: '' });
     const key = r => r ? (r.gap ? 'g' + r.start : 'p' + r.num) : '';
     let cur = rows.find(r => key(r) === A.sel) || rows.find(r => r.gap) || rows[0]; A.sel = key(cur);
-    const gb = mb => (mb / 1024).toFixed(1) + ' GB';
+    const gb = mb => mb < 1024 ? mb.toFixed(1) + ' MB' : (mb / 1024).toFixed(1) + ' GB';
     const tb = h('table', { class: 'ws-tbl' }, h('thead', null, h('tr', null, h('th', { text: 'Name' }), h('th', { text: 'Total size' }), h('th', { text: 'Free space' }), h('th', { text: 'Type' }))));
     const body = h('tbody'); tb.append(body);
     for (const r of rows) body.append(h('tr', { class: key(r) === A.sel ? 'on' : '', tabindex: '0', onclick: () => { A.sel = key(r); A.err = null; render(); }, onkeydown: e => { if (e.key === 'Enter') { A.sel = key(r); render(); } } },
@@ -16913,8 +16956,9 @@ W11.os = function (ctx) {
     root.append(h('div', { class: 'w11-black' + (o.blue ? ' blue' : '') }, o.logo ? CUI.oemLogo(d, true) : null, CUI.spinner(o.logo ? 'boot' : ''), text ? h('div', { class: 'msg', text }) : null, o.sub ? h('div', { class: 'msg2', text: o.sub }) : null));
     T.after(ms, next);
   }
-  function restart(reason) { if (desk) desk.dispose(); black(reason || 'Restarting', 1500, () => { ctx.reboot(); }, { blue: true }); }
-  function shutdown() { if (desk) desk.dispose(); black('Shutting down', 1300, () => { ctx.powerOff(); }, { blue: true }); }
+  let pending = null;
+  function restart(reason) { if (desk) desk.dispose(); pending = 'reboot'; black(reason || 'Restarting', 1500, () => { pending = null; ctx.reboot(); }, { blue: true }); }
+  function shutdown() { if (desk) desk.dispose(); pending = 'off'; black('Shutting down', 1300, () => { pending = null; ctx.powerOff(); }, { blue: true }); }
   ctx.osPower = act => act === 'off' ? shutdown() : restart();
   /* ----- OOBE ----- */
   function oobe() {
@@ -17136,10 +17180,9 @@ W11.os = function (ctx) {
   return {
     focus: () => focusFn && focusFn(),
     refresh: () => { if (desk) desk.refresh(); else if (sub && sub.refresh) sub.refresh(); },
-    dispose: () => { if (desk) desk.dispose(); },
+    dispose: () => { if (desk) desk.dispose(); if (pending) { const k = pending; pending = null; CUI.finishPower(d, k); } },
   };
 };
-W11.ctxPower = null;
 function powerMenu(anchor, sys) {
   const host = anchor.closest('.w11'); const r = anchor.getBoundingClientRect(), hr = host.getBoundingClientRect();
   const m = h('div', { class: 'w11-menu', role: 'menu', style: 'right:' + Math.max(6, hr.right - r.right) + 'px;bottom:' + Math.max(6, hr.bottom - r.top + 6) + 'px' },
@@ -17565,7 +17608,6 @@ A.settings = { title: 'Settings', icon: 'settings', w: 900, h: 580, cls: 'w11-se
       const box = h('div', { class: 'ip-box' }, h('div', { class: 'ip-v4' }, h('b', { text: 'IPv4' }), h('span', { class: 'muted', text: 'On' })), ip.el, mk.el, gw.el, d1.el, h('div', { class: 'ip-f' }, h('label', { text: 'DNS over HTTPS' }), h('select', { class: 'w11i', disabled: true }, h('option', { text: 'Off' }))), d2.el);
       const sync = () => { box.hidden = mode.value !== 'man'; };
       mode.addEventListener('change', sync); sync();
-      mk.i.addEventListener('focus', () => { if (!mk.i.value && v4ok(ip.i.value)) mk.i.value = WX.classMask(ip.i.value) || '255.255.255.0'; });
       D.modal('Edit IP settings', h('div', { style: 'display:flex;flex-direction:column;gap:10px;min-width:0' }, mode, box, er), [['Save', () => {
         if (mode.value === 'auto') { Object.assign(v, { auto: true, ip: '', mask: '', gw: '', dnsAuto: true, dns1: '', dns2: '' }); COS.winApplyNet(Pj(), d); commit(); D.changed(); draw(); return; }
         const nv = { ip: ip.i.value.trim(), mask: mk.i.value.trim(), gw: gw.i.value.trim(), dns1: d1.i.value.trim(), dns2: d2.i.value.trim() };
@@ -18281,7 +18323,10 @@ UBU.os = function (ctx) {
   const root = h('div', { class: 'ug' + (o().dark ? ' dark' : '') }); screen.append(root);
   let desk = null, focusFn = null;
   function black(text, ms, next) { root.textContent = ''; if (desk) { desk.dispose(); desk = null; } root.append(h('div', { class: 'ug-black' }, CUI.oemLogo(d, true), h('div', { class: 'ubu-word' }, ico('mark', 26), h('span', { text: 'ubuntu' })), text ? h('div', { class: 'msg', text }) : h('div', { class: 'ubu-spin' }))); T.after(ms, next); }
-  function shutdownText(kind, next) {
+  let pending = null;
+  function shutdownText(kind, next, pk) {
+    pending = pk || (kind === 'reboot' ? 'reboot' : 'off');
+    const next0 = next; next = () => { pending = null; next0(); };
     if (desk) { desk.dispose(); desk = null; }
     root.textContent = '';
     const pre = h('pre', { class: 'ug-sd' }); root.append(pre);
@@ -18381,9 +18426,9 @@ UBU.os = function (ctx) {
   function showDesk() {
     T.clear(); root.textContent = '';
     const O = o();
-    desk = Gnome(ctx, root, { reboot: () => confirmPower('reboot'), poweroff: () => confirmPower('off'), logout: () => confirmPower('logout', (O.session || {}).full), lock: lockScreen, theme: t => root.classList.toggle('dark', t), halt: () => shutdownText('reboot', () => { COS.stopOS(Pj(), d); commit(); ctx.go('halt'); }) });
+    desk = Gnome(ctx, root, { reboot: () => confirmPower('reboot'), poweroff: () => confirmPower('off'), logout: () => confirmPower('logout', (O.session || {}).full), lock: lockScreen, theme: t => root.classList.toggle('dark', t), halt: () => shutdownText('reboot', () => { COS.stopOS(Pj(), d); commit(); ctx.go('halt'); }, 'halt') });
     focusFn = () => desk && desk.focus();
-    if (O.live && !ctx.rt.instSeen) { ctx.rt.instSeen = true; T.after(600, () => desk && desk.open('install')); }
+    if (O.live && (!ctx.rt.instSeen || (O._inst && O._inst.open))) { ctx.rt.instSeen = true; T.after(600, () => desk && desk.open('install')); }
     if (!O.live && O.firstLogin) { T.after(500, () => desk && desk.open('welcome')); }
   }
   const O = o();
@@ -18393,7 +18438,7 @@ UBU.os = function (ctx) {
   return {
     focus: () => focusFn && focusFn(),
     refresh: () => { if (desk) desk.refresh(); },
-    dispose: () => { if (desk) desk.dispose(); },
+    dispose: () => { if (desk) desk.dispose(); if (pending) { const k = pending; pending = null; CUI.finishPower(d, k); } },
   };
 };
 
@@ -18853,7 +18898,7 @@ const Pj = () => NL.UI.P;
 const commit = CUI.commit;
 const { ico, gbtn, ginp, uid, gswitch } = UBU;
 const SZ = COS.SIZES;
-const gb = mb => (mb * 1.048576 / 1000).toFixed(1).replace(/\.0$/, '') + ' GB';
+const gb = mb => { const g = mb * 1.048576 / 1000; return g < 1 ? (g * 1000).toFixed(1).replace(/\.0$/, '') + ' MB' : g.toFixed(1).replace(/\.0$/, '') + ' GB'; };
 const FLOW = ['lang', 'a11y', 'kb', 'net', 'try', 'type', 'apps', 'prop', 'disk', 'diskx', 'user', 'tz', 'review'];
 
 UBU.APPS.install = { title: 'Install Ubuntu 24.04.1 LTS', icon: 'install', w: 880, h: 600, cls: 'ug-inst', make(G, W) {
@@ -19091,7 +19136,8 @@ UBU.APPS.install = { title: 'Install Ubuntu 24.04.1 LTS', icon: 'install', w: 88
     T.every(100, () => { pct = Math.min(100, pct + 0.9); bar.style.width = pct + '%'; stat.textContent = STEPS[Math.min(STEPS.length - 1, Math.floor(pct / 17))]; const want = Math.floor(pct / 100 * LOG.length); while (li < want) { log.textContent += LOG[li++] + '\n'; log.scrollTop = log.scrollHeight; } if (pct >= 100) { T.clear(); go('done'); } });
     T.every(2600, () => { si = (si + 1) % slides.length; setSlide(); });
   }
-  W.beforeClose = () => { if (S.step === 'installing' && !S.closedOk) { G.msg('Installation in progress', 'Tunggu sampai instalasi selesai.'); return false; } return true; };
+  S.open = true;
+  W.beforeClose = () => { if (S.step === 'installing' && !S.closedOk) { G.msg('Installation in progress', 'Tunggu sampai instalasi selesai.'); return false; } S.open = false; return true; };
   draw();
   return { dispose: () => T.clear(), reopen: () => {}, refresh: () => { if (S.step === 'net' && !W.el.querySelector('.ug-dlgov')) draw(); } };
 } };
