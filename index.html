@@ -17316,7 +17316,11 @@ function Shell(ctx, root, sys) {
   function tbBtn(k, label, open, fn) { const act = open.some(x => !x.el.hidden && +x.el.style.zIndex === z); return h('button', { type: 'button', class: 'tb app' + (open.length ? ' open' : '') + (act ? ' act' : ''), title: label, 'aria-label': label, onclick: fn }, ico(k, 22)); }
   function toggleWin(W) { if (!W.el.hidden && +W.el.style.zIndex === z) { W.el.hidden = true; drawTask(); } else focus(W); }
   function closePop() { if (pop) { pop.el.remove(); pop = null; drawTask(); } }
-  function toggle(kind, search) { if (pop && pop.kind === kind) { closePop(); return; } closePop(); pop = { kind, el: kind === 'start' ? startMenu(search) : kind === 'winx' ? winX() : kind === 'qs' ? quick() : calendar() }; pop.el.classList.add('w11-pop2'); root.append(pop.el); drawTask(); const f = pop.el.querySelector('input,button'); if (f) f.focus(); pop.el.addEventListener('keydown', e => { if (e.key === 'Escape') { e.stopPropagation(); closePop(); } }); }
+  function toggle(kind, search) { if (pop && pop.kind === kind) { closePop(); return; } closePop(); pop = { kind, el: kind === 'start' ? startMenu(search) : kind === 'winx' ? winX() : kind === 'qs' ? quick() : calendar() }; pop.el.classList.add('w11-pop2'); root.append(pop.el); drawTask();
+    if (kind === 'winx') { /* Win+X opens above the (centred) Start button, like Windows 11 */
+      const sb = task.querySelector('.tb[aria-label=Start]');
+      if (sb) { const rr = root.getBoundingClientRect(), br = sb.getBoundingClientRect(), k = rr.width / (root.offsetWidth || rr.width) || 1;
+        pop.el.style.left = Math.max(6, Math.min(root.offsetWidth - pop.el.offsetWidth - 6, (br.left - rr.left) / k)) + 'px'; } } const f = pop.el.querySelector('input,button'); if (f) f.focus(); pop.el.addEventListener('keydown', e => { if (e.key === 'Escape') { e.stopPropagation(); closePop(); } }); }
   D.closePop = closePop;
   /* Start menu */
   const ALL = () => [
