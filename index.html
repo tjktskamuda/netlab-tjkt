@@ -360,6 +360,33 @@ textarea.inp { font-family: var(--f-mono); font-size: 12.5px; resize: vertical; 
   .lab .btn { justify-self: start; grid-row: 3; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+/* ---------- profil siswa (gerbang masuk) ---------- */
+.gate { position: fixed; inset: 0; z-index: 10000; background: var(--bg); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px)); overflow: auto; }
+.gate-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); width: min(460px, 100%); padding: 22px 20px 18px; display: flex; flex-direction: column; gap: 12px; }
+.gate-card h1 { margin: 0; font-size: 20px; line-height: 1.25; }
+.gate-card .lead { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+.gate-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--accent); font-size: 13px; letter-spacing: .02em; }
+.gate-brand img { width: 26px; height: 26px; }
+.gate-list { display: flex; flex-direction: column; gap: 6px; max-height: min(320px, 42vh); overflow: auto; }
+.gate-user { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; color: var(--ink); min-height: 48px; }
+.gate-user:hover, .gate-user:focus-visible { border-color: var(--accent); }
+.gate-user b { display: block; font-size: 14.5px; }
+.gate-user small { color: var(--muted); font-size: 12px; }
+.gate-av { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 16%, var(--panel)); color: var(--accent); font-weight: 700; }
+.gate-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.gate-row .btn { margin: 0; flex: 1 1 140px; min-height: 40px; }
+.gate-f { display: flex; flex-direction: column; gap: 4px; }
+.gate-f label { font-size: 12.5px; font-weight: 600; }
+.gate-f .inp { font-family: inherit; font-size: 15px; padding: 9px 10px; }
+.gate-err { color: var(--bad); font-size: 13px; min-height: 1em; margin: 0; }
+.gate-note { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.45; border-top: 1px solid var(--line); padding-top: 10px; }
+.gate-link { background: none; border: 0; color: var(--accent); padding: 4px 0; font-size: 13px; align-self: flex-start; text-decoration: underline; }
+.gate-link.danger { color: var(--bad); }
+.user-chip { display: inline-flex; align-items: center; gap: 6px; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px 3px 3px; color: var(--ink); font-size: 13px; max-width: 180px; min-height: 32px; }
+.user-chip .gate-av { width: 26px; height: 26px; font-size: 12px; }
+.user-chip span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-chip.guest .gate-av { background: color-mix(in srgb, var(--warn) 22%, var(--panel)); color: var(--ink); }
+@media (max-width: 560px) { .user-chip { padding: 3px; } .user-chip span:last-child { display: none; } }
 </style>
 <style>
 /* ===== Winbox simulator (fixed light look, like the desktop tool) ===== */
@@ -1640,6 +1667,88 @@ textarea.inp { font-family: var(--f-mono); font-size: 12.5px; resize: vertical; 
 .w11.dark .w11-menu button:hover, .w11.dark .w11-menu button:focus-visible { background: rgba(255,255,255,.08); }
 /* scroll containers: children keep their natural height instead of shrinking (and clipping) */
 .st-main > *, .gs-main > *, .ins-main > *, .ins-body > *, .dk-main > *, .cp-main > *, .ws-in > *, .ws-form > *, .oobe-body > *, .oobe-main > *, .nf-main > *, .qs-wl > *, .ug-qs > *, .w11-qs > *, .smb > *, .uefi-list > *, .cos-info > * { flex-shrink: 0; }
+/* ---------- Windows 11 File Explorer ---------- */
+.w11-fe .ww-b { display: flex; flex-direction: column; background: #f9f9f9; color: #1b1b1b; min-height: 0; position: relative; }
+.w11-fe .fe-top { display: flex; align-items: center; gap: 2px; padding: 6px 8px; background: #f3f3f3; border-bottom: 1px solid #e5e5e5; flex: none; min-width: 0; }
+.w11-fe .fe-nb { width: 32px; height: 32px; display: grid; place-items: center; border: 0; border-radius: 4px; background: none; color: #1b1b1b; flex: none; cursor: pointer; }
+.w11-fe .fe-nb:hover:not(:disabled) { background: rgba(0,0,0,.06); }
+.w11-fe .fe-nb:disabled { color: #a0a0a0; cursor: default; }
+.w11-fe .fe-addrwrap { flex: 1 1 auto; min-width: 0; margin: 0 4px; }
+.w11-fe .fe-crumbs { display: flex; align-items: center; gap: 0; height: 32px; padding: 0 6px; background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; white-space: nowrap; cursor: text; }
+.w11-fe .fe-crumb { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; padding: 3px 6px; border-radius: 3px; font: inherit; font-size: 13px; color: #1b1b1b; cursor: pointer; flex: none; max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+.w11-fe .fe-crumb:hover { background: rgba(0,0,0,.06); }
+.w11-fe .fe-chev { color: #6b6b6b; padding: 0 1px; flex: none; }
+.w11-fe .fe-addr, .w11-fe .fe-search { height: 32px; box-sizing: border-box; border: 1px solid #e0e0e0; border-bottom-color: #8a8a8a; border-radius: 4px; padding: 0 9px; font: inherit; font-size: 13px; background: #fff; color: #1b1b1b; width: 100%; min-width: 0; }
+.w11-fe .fe-addr:focus, .w11-fe .fe-search:focus { outline: none; border-bottom: 2px solid var(--acc, #005fb8); }
+.w11-fe .fe-search { flex: 0 1 200px; width: 200px; }
+.w11-fe .fe-cmd { display: flex; align-items: center; gap: 2px; padding: 4px 8px; background: #f9f9f9; border-bottom: 1px solid #e5e5e5; flex: none; overflow-x: auto; }
+.w11-fe .fe-cb { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; padding: 6px 10px; border-radius: 4px; font: inherit; font-size: 13px; color: #1b1b1b; cursor: pointer; flex: none; min-height: 32px; }
+.w11-fe .fe-cb:hover:not(:disabled) { background: rgba(0,0,0,.06); }
+.w11-fe .fe-cb:disabled { color: #a0a0a0; cursor: default; }
+.w11-fe .fe-cb:disabled .svgi { opacity: .45; }
+.w11-fe .fe-sep { width: 1px; height: 20px; background: #e0e0e0; margin: 0 4px; flex: none; }
+.w11-fe .fe-body { display: flex; flex: 1 1 auto; min-height: 0; }
+.w11-fe .fe-nav { flex: none; width: 196px; overflow-y: auto; padding: 6px 4px; background: #f9f9f9; border-right: 1px solid #e5e5e5; display: flex; flex-direction: column; gap: 1px; }
+.w11-fe .fe-nav hr { border: 0; border-top: 1px solid #e5e5e5; margin: 5px 6px; width: auto; }
+.w11-fe .fe-ni { display: flex; align-items: center; gap: 8px; border: 0; background: none; padding: 5px 8px; border-radius: 4px; font: inherit; font-size: 13px; color: #1b1b1b; text-align: left; cursor: pointer; min-height: 30px; flex: none; }
+.w11-fe .fe-ni span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.w11-fe .fe-ni:hover { background: rgba(0,0,0,.05); }
+.w11-fe .fe-ni.on { background: rgba(0,0,0,.07); box-shadow: inset 3px 0 0 var(--acc, #005fb8); }
+.w11-fe .fe-main { flex: 1 1 auto; min-width: 0; overflow: auto; background: #fff; padding: 6px 10px 10px; outline: none; }
+.w11-fe .fe-h { font-size: 13px; font-weight: 600; margin: 8px 4px 8px; color: #1b1b1b; }
+.w11-fe .fe-drives { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 6px; }
+.w11-fe .fe-drive { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border: 1px solid transparent; border-radius: 4px; background: none; text-align: left; font: inherit; color: #1b1b1b; cursor: pointer; min-height: 64px; }
+.w11-fe .fe-drive:hover { background: #e5f3ff; }
+.w11-fe .fe-drive.sel { background: #cce8ff; border-color: #99d1ff; }
+.w11-fe .fe-dinfo { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.w11-fe .fe-dinfo b { font-weight: 400; font-size: 13.5px; }
+.w11-fe .fe-dinfo small { color: #6b6b6b; font-size: 12px; }
+.w11-fe .fe-bar { display: block; height: 14px; background: #e6e6e6; border: 1px solid #bcbcbc; border-radius: 0; overflow: hidden; }
+.w11-fe .fe-bar i { display: block; height: 100%; background: #26a0da; }
+.w11-fe .fe-bar.full i { background: #da2626; }
+.w11-fe .fe-quick { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; margin-bottom: 6px; }
+.w11-fe .fe-qa { display: flex; align-items: center; gap: 10px; padding: 8px; border: 0; border-radius: 4px; background: none; text-align: left; font: inherit; color: #1b1b1b; cursor: pointer; min-height: 52px; }
+.w11-fe .fe-qa:hover { background: #e5f3ff; }
+.w11-fe .fe-qa b { display: block; font-weight: 400; font-size: 13.5px; }
+.w11-fe .fe-qa small { color: #6b6b6b; font-size: 12px; }
+.w11-fe .fe-tbl { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: auto; }
+.w11-fe .fe-tbl th { text-align: left; font-weight: 400; color: #4c4c4c; padding: 6px 8px; border-bottom: 1px solid #e5e5e5; border-right: 1px solid #f0f0f0; white-space: nowrap; position: sticky; top: -6px; background: #fff; z-index: 1; }
+.w11-fe .fe-tbl td { padding: 4px 8px; white-space: nowrap; color: #5d5d5d; border: 1px solid transparent; }
+.w11-fe .fe-tbl td.num { text-align: right; }
+.w11-fe .fe-name { color: #1b1b1b !important; min-width: 180px; }
+.w11-fe .fe-name > .svgi { vertical-align: -4px; margin-right: 8px; }
+.w11-fe .fe-row { cursor: default; outline: none; }
+.w11-fe .fe-row:hover td { background: #e5f3ff; }
+.w11-fe .fe-row.sel td { background: #cce8ff; }
+.w11-fe .fe-row:focus-visible td { box-shadow: inset 0 1px 0 #0078d4, inset 0 -1px 0 #0078d4; }
+.w11-fe .fe-empty { text-align: center; color: #6b6b6b !important; padding: 28px 8px !important; white-space: normal !important; }
+.w11-fe .fe-renwrap { position: relative; display: inline-block; }
+.w11-fe .fe-ren { font: inherit; font-size: 13px; padding: 1px 4px; border: 1px solid #0078d4; outline: none; min-width: 160px; background: #fff; color: #1b1b1b; }
+.w11-fe .fe-tipbox { position: absolute; left: 0; top: 100%; margin-top: 4px; z-index: 5; background: #fff; color: #1b1b1b; border: 1px solid #c8c8c8; box-shadow: 0 4px 12px rgba(0,0,0,.18); padding: 6px 9px; font-size: 12px; white-space: normal; width: 260px; border-radius: 4px; }
+.w11-fe .fe-tip { margin: 14px 4px 0; padding: 10px 12px; font-size: 12.5px; line-height: 1.45; background: #fff8e1; border: 1px solid #f0d58a; border-radius: 6px; color: #4a3b00; }
+.w11-fe .fe-status { flex: none; font-size: 12px; color: #4c4c4c; padding: 4px 12px; border-top: 1px solid #e5e5e5; background: #f9f9f9; white-space: pre; }
+.w11-fe .fe-menu { z-index: 30; }
+.w11-fe .fe-menu hr { border: 0; border-top: 1px solid #e0e0e0; margin: 4px 2px; }
+.w11-fe .fe-menu button:disabled { color: #a0a0a0; cursor: default; }
+/* small windows / phones */
+.w11-fe.max .fe-nav, .w11-fe .fe-body.narrow .fe-nav { width: 150px; }
+.w11-fe.max .fe-search { width: 120px; flex-basis: 120px; }
+@media (max-width: 620px) { .w11-fe .fe-nav { display: none; } .w11-fe .fe-search { width: 96px; flex-basis: 96px; } .w11-fe .fe-cb span:last-child { display: none; } .w11-fe .fe-tbl th:nth-child(2), .w11-fe .fe-tbl td:nth-child(2), .w11-fe .fe-tbl th:nth-child(3), .w11-fe .fe-tbl td:nth-child(3) { display: none; } .w11-fe .fe-name { min-width: 0; } .w11-fe .fe-drives { grid-template-columns: 1fr; } }
+/* dark mode */
+.w11.dark .w11-fe .ww-b, .w11.dark .w11-fe .fe-cmd, .w11.dark .w11-fe .fe-nav, .w11.dark .w11-fe .fe-status { background: #202020; color: #fff; border-color: #333; }
+.w11.dark .w11-fe .fe-top { background: #1c1c1c; border-color: #333; }
+.w11.dark .w11-fe .fe-main, .w11.dark .w11-fe .fe-tbl th { background: #191919; color: #fff; }
+.w11.dark .w11-fe .fe-crumbs, .w11.dark .w11-fe .fe-addr, .w11.dark .w11-fe .fe-search, .w11.dark .w11-fe .fe-ren { background: #2b2b2b; border-color: #3a3a3a; color: #fff; }
+.w11.dark .w11-fe .fe-nb, .w11.dark .w11-fe .fe-crumb, .w11.dark .w11-fe .fe-cb, .w11.dark .w11-fe .fe-ni, .w11.dark .w11-fe .fe-drive, .w11.dark .w11-fe .fe-qa, .w11.dark .w11-fe .fe-name, .w11.dark .w11-fe .fe-h { color: #fff !important; }
+.w11.dark .w11-fe .fe-tbl td, .w11.dark .w11-fe .fe-dinfo small, .w11.dark .w11-fe .fe-qa small, .w11.dark .w11-fe .fe-tbl th, .w11.dark .w11-fe .fe-status { color: #c8c8c8; }
+.w11.dark .w11-fe .fe-row:hover td, .w11.dark .w11-fe .fe-drive:hover, .w11.dark .w11-fe .fe-qa:hover { background: #2d2d2d; }
+.w11.dark .w11-fe .fe-row.sel td, .w11.dark .w11-fe .fe-drive.sel { background: #0f3b5f; border-color: #1a5c8f; }
+.w11.dark .w11-fe .fe-ni:hover, .w11.dark .w11-fe .fe-cb:hover:not(:disabled), .w11.dark .w11-fe .fe-nb:hover:not(:disabled), .w11.dark .w11-fe .fe-crumb:hover { background: rgba(255,255,255,.08); }
+.w11.dark .w11-fe .fe-ni.on { background: rgba(255,255,255,.1); }
+.w11.dark .w11-fe .fe-bar { background: #3a3a3a; border-color: #555; }
+.w11.dark .w11-fe .fe-tip { background: #3a3320; border-color: #6b5a24; color: #f3e3b0; }
+.w11.dark .w11-fe .fe-sep, .w11.dark .w11-fe .fe-nav hr { background: #3a3a3a; border-color: #3a3a3a; }
+.w11.dark .w11-fe .fe-cb:disabled, .w11.dark .w11-fe .fe-nb:disabled { color: #6e6e6e !important; }
 </style>
 </head>
 <body>
@@ -8304,6 +8413,7 @@ function breakOn(d, p, why) {
 COS.formatPart = function (d, num, fs) {
   const p = COS.findPart(d, num); if (!p) return;
   breakOn(d, p, 'format');
+  delete p.data;   /* files/folders of a D: drive go with the format */
   p.fs = fs; p.used = fs === 'ntfs' ? 60 : fs === 'ext4' ? 300 : 1; p.role = fs === 'ntfs' ? 'data' : fs === 'ext4' ? 'linux' : fs === 'fat32' ? 'esp' : p.role; p.owner = null; p.label = fs === 'ntfs' ? 'Basic data partition' : '';
   p.uuid = uuid(d.id + ':fmt:' + num + ':' + now());
 };
@@ -8537,7 +8647,7 @@ COS.installWindows = function (P, d, o) {
   } else if (t.num != null) {
     sys = COS.findPart(d, t.num); if (!sys) return { err: 'Partition not found.' };
     if (sys.fs !== 'ntfs' || sys.role === 'recovery' || sys.role === 'esp' || sys.role === 'msr') return { err: 'fs' };
-    breakOn(d, sys, 'format');
+    breakOn(d, sys, 'format'); delete sys.data; delete sys.letter;
     Object.assign(sys, { role: 'win', label: 'Basic data partition', used: SIZES.winUsed, owner: 'windows', fs: 'ntfs' });
     if (!esp) return { err: 'noesp' };
   } else return { err: 'Pilih lokasi instalasi.' };
@@ -10847,6 +10957,199 @@ let pduSeq = 0;
 
 function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } return null; }
 
+/* ---------- profil siswa: pekerjaan tiap siswa terpisah di perangkat/browser bersama ----------
+   Semua data tetap lokal (localStorage). Kunci per profil: netlab.u.<id>.autosave / .projects.
+   Mode tamu memakai sessionStorage (hilang saat browser ditutup). */
+const PROFILE = { cur: null, fails: 0, lockUntil: 0, last: Date.now() };
+const IDLE_MIN = 30;
+function storageOk() { try { const k = 'netlab.__t'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } }
+function sess(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) { return null; } return null; }
+function pinHash(id, pin) { /* cyrb53 — cukup untuk menjaga dari teman sekelas, bukan pengaman kriptografis */
+  const str = 'netlab:' + id + ':' + pin; let h1 = 0xdeadbeef ^ 7, h2 = 0x41c6ce57 ^ 7;
+  for (let i = 0; i < str.length; i++) { const ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+function profiles() { try { const L = JSON.parse(store('netlab.users') || '[]'); return Array.isArray(L) ? L : []; } catch (e) { return []; } }
+function saveProfiles(L) { store('netlab.users', JSON.stringify(L)); }
+/* per-profile storage (guest → sessionStorage) */
+function uget(k) { const c = PROFILE.cur; if (!c) return null; return c.guest ? sess('netlab.guest.' + k) : store('netlab.u.' + c.id + '.' + k); }
+function uset(k, v) {
+  const c = PROFILE.cur; if (!c) return false;
+  try { if (c.guest) sessionStorage.setItem('netlab.guest.' + k, v); else localStorage.setItem('netlab.u.' + c.id + '.' + k, v); return true; } catch (e) { return false; }
+}
+/* data from before profiles existed (one shared autosave/projects per browser) → its own "Data lama" profile */
+function migrateLegacy() {
+  if (!storageOk() || store('netlab.migrated')) return;
+  const a = store('netlab.autosave'), p = store('netlab.projects');
+  let hasP = false; try { hasP = Object.keys(JSON.parse(p || '{}') || {}).length > 0; } catch (e) { }
+  if (a || hasP) {
+    const L = profiles();
+    if (!L.some(u => u.id === 'lama')) L.push({ id: 'lama', name: 'Data lama perangkat ini', kelas: 'sebelum pembaruan', legacy: true, t: Date.now() });
+    saveProfiles(L);
+    if (a) store('netlab.u.lama.autosave', a);
+    if (p) store('netlab.u.lama.projects', p);
+  }
+  store('netlab.autosave', null); store('netlab.projects', null); store('netlab.migrated', '1');
+}
+function initials(n) { return String(n || '?').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || '?'; }
+function renderUser() {
+  let chip = $('#userChip');
+  if (!chip) { chip = h('button', { class: 'user-chip', id: 'userChip', type: 'button', onclick: e => userMenu(e.currentTarget) }); const pn = $('#projName'); pn.after(chip); }
+  const c = PROFILE.cur; chip.hidden = !c; if (!c) return;
+  chip.classList.toggle('guest', !!c.guest); chip.textContent = '';
+  chip.append(h('span', { class: 'gate-av', text: c.guest ? 'T' : initials(c.name) }), h('span', { text: c.guest ? 'Tamu' : c.name }));
+  chip.title = c.guest ? 'Mode tamu — pekerjaan hilang saat browser ditutup' : 'Masuk sebagai ' + c.name + (c.kelas ? ' (' + c.kelas + ')' : '');
+  chip.setAttribute('aria-label', 'Akun: ' + (c.guest ? 'Tamu' : c.name));
+}
+function userMenu(anchor) {
+  const c = PROFILE.cur; if (!c) return;
+  const r = anchor.getBoundingClientRect();
+  const it = (label, fn, cls) => h('button', { class: 'mi' + (cls ? ' ' + cls : ''), role: 'menuitem', onclick: () => { closePop(); fn(); }, text: label });
+  openPop(r.right - 220, r.bottom + 6, h('div', { style: 'min-width:220px' },
+    h('div', { style: 'padding:8px 12px;font-size:12.5px;color:var(--muted)', text: c.guest ? 'Mode tamu (tidak disimpan permanen)' : 'Masuk sebagai ' + c.name + (c.kelas ? ' · ' + c.kelas : '') }),
+    c.guest || c.legacy ? null : it('Ganti PIN', changePin),
+    it('Keluar', logout)));
+}
+function login(u, quiet) {
+  PROFILE.cur = u; PROFILE.last = Date.now();
+  sess('netlab.session', u.guest ? 'guest' : u.id);
+  if (!u.guest) { const L = profiles(); const x = L.find(v => v.id === u.id); if (x) { x.t = Date.now(); saveProfiles(L); } }
+  closeGate(); renderUser();
+  let saved = null; try { saved = JSON.parse(uget('autosave') || 'null'); } catch (e) { saved = null; }
+  let ok = false;
+  if (saved && saved.data) { try { loadProject(saved.data, saved.name, saved.pdus); ok = true; } catch (e) { ok = false; } }
+  if (!ok) { const sm = NL.SAMPLES.find(x => x.id === 'router'); loadProject(sm.build(), sm.title); }
+  renderPdu();
+  if (!quiet) toast(u.guest ? 'Mode tamu: simpan hasil dengan Ekspor sebelum menutup browser' : 'Halo, ' + u.name + '! Pekerjaanmu tersimpan terpisah di perangkat ini.', 3600);
+}
+function logout(reason) {
+  if (PROFILE.cur) { clearTimeout(saveT); autosave(); }
+  PROFILE.cur = null; sess('netlab.session', null);
+  loadProject(NL.newProject(), 'Proyek tanpa nama'); renderPdu(); renderUser();
+  showGate(reason);
+}
+function changePin() {
+  const c = PROFILE.cur; if (!c || c.guest) return;
+  const f = (id, label) => h('div', { class: 'gate-f' }, h('label', { for: id, text: label }), h('input', { class: 'inp', id, type: 'password', inputmode: 'numeric', maxlength: 6, autocomplete: 'off' }));
+  const er = h('p', { class: 'gate-err', role: 'alert' });
+  modal('Ganti PIN', [f('pinOld', 'PIN lama'), f('pinNew', 'PIN baru (4–6 angka)'), f('pinNew2', 'Ulangi PIN baru'), er], [
+    h('button', { class: 'btn sec', onclick: closeModal, text: 'Batal' }),
+    h('button', { class: 'btn', onclick: () => {
+      const L = profiles(); const x = L.find(v => v.id === c.id);
+      const o = $('#pinOld').value, n = $('#pinNew').value, n2 = $('#pinNew2').value;
+      if (!x || x.pin !== pinHash(x.id, o)) { er.textContent = 'PIN lama salah.'; return; }
+      if (!/^\d{4,6}$/.test(n)) { er.textContent = 'PIN baru harus 4–6 angka.'; return; }
+      if (n !== n2) { er.textContent = 'Ulangan PIN baru tidak sama.'; return; }
+      x.pin = pinHash(x.id, n); saveProfiles(L); closeModal(); toast('PIN diganti');
+    }, text: 'Simpan' })]);
+  setTimeout(() => $('#pinOld').focus(), 30);
+}
+function closeGate() { const g = $('#gate'); if (g) g.remove(); }
+function showGate(reason, view, arg) {
+  closeModal(); closePop(); closeGate();
+  const card = h('div', { class: 'gate-card', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'gateTitle' });
+  const g = h('div', { class: 'gate', id: 'gate' }, card);
+  document.body.append(g);
+  const mark = $('.brand-mark');
+  const brand = h('div', { class: 'gate-brand' }, mark ? h('img', { src: mark.src, alt: '' }) : null, 'NetLab TJKT');
+  const can = storageOk();
+  const L = profiles().sort((a, b) => (b.t || 0) - (a.t || 0));
+  const field = (id, label, o) => h('div', { class: 'gate-f' }, h('label', { for: id, text: label }), h('input', Object.assign({ class: 'inp', id, autocomplete: 'off' }, o || {})));
+  const er = h('p', { class: 'gate-err', role: 'alert' });
+  const note = h('p', { class: 'gate-note', text: 'Pekerjaan disimpan hanya di browser perangkat ini, terpisah untuk setiap siswa dan dilindungi PIN. Tidak ada yang dikirim ke internet. Untuk pindah perangkat atau mengumpulkan tugas, pakai menu Ekspor.' });
+  view = view || 'list';
+  if (view === 'list') {
+    card.append(brand, h('h1', { id: 'gateTitle', text: 'Siapa yang memakai NetLab?' }));
+    if (reason) card.append(h('p', { class: 'lead', style: 'color:var(--warn)', text: reason }));
+    if (!can) card.append(h('p', { class: 'lead', text: 'Penyimpanan browser tidak tersedia (mungkin mode penyamaran). Kamu tetap bisa memakai mode tamu dan menyimpan hasil lewat Ekspor.' }));
+    else if (L.length) {
+      card.append(h('p', { class: 'lead', text: 'Pilih namamu lalu masukkan PIN. Belum punya? Buat profil baru.' }));
+      const list = h('div', { class: 'gate-list' });
+      for (const u of L) list.append(h('button', { class: 'gate-user', type: 'button', onclick: () => showGate(null, 'pin', u) },
+        h('span', { class: 'gate-av', text: u.legacy ? '…' : initials(u.name) }), h('span', null, h('b', { text: u.name }), h('small', { text: (u.kelas ? u.kelas + ' · ' : '') + (u.t ? 'terakhir ' + new Date(u.t).toLocaleDateString('id-ID') : '') }))));
+      card.append(list);
+    } else card.append(h('p', { class: 'lead', text: 'Buat profil dulu supaya pekerjaanmu tidak tercampur dengan siswa lain yang memakai perangkat ini.' }));
+    card.append(h('div', { class: 'gate-row' },
+      can ? h('button', { class: 'btn', type: 'button', onclick: () => showGate(null, 'new'), text: '+ Siswa baru' }) : null,
+      h('button', { class: 'btn sec', type: 'button', onclick: () => login({ guest: true, id: 'guest', name: 'Tamu' }), text: 'Mode tamu' })), note);
+    setTimeout(() => { const b = card.querySelector('.gate-user, .btn'); if (b) b.focus(); }, 30);
+  } else if (view === 'new') {
+    const nm = field('gName', 'Nama', { maxlength: 40, autocapitalize: 'words', placeholder: 'contoh: Budi Santoso' });
+    const kl = field('gKelas', 'Kelas (boleh dikosongkan)', { maxlength: 24, placeholder: 'contoh: XI TJKT 1' });
+    const p1 = field('gPin', 'Buat PIN (4–6 angka)', { type: 'password', inputmode: 'numeric', maxlength: 6 });
+    const p2 = field('gPin2', 'Ulangi PIN', { type: 'password', inputmode: 'numeric', maxlength: 6 });
+    const go = () => {
+      const name = $('#gName').value.trim().replace(/\s+/g, ' '), kelas = $('#gKelas').value.trim(), pin = $('#gPin').value, pin2 = $('#gPin2').value;
+      if (name.length < 2) { er.textContent = 'Isi namamu (minimal 2 huruf).'; $('#gName').focus(); return; }
+      const Ls = profiles();
+      if (Ls.some(u => u.name.toLowerCase() === name.toLowerCase() && (u.kelas || '').toLowerCase() === kelas.toLowerCase())) { er.textContent = 'Profil dengan nama dan kelas itu sudah ada di perangkat ini. Pilih dari daftar, atau tambahkan nama lengkap.'; return; }
+      if (!/^\d{4,6}$/.test(pin)) { er.textContent = 'PIN harus 4–6 angka.'; $('#gPin').focus(); return; }
+      if (pin !== pin2) { er.textContent = 'Ulangan PIN tidak sama.'; $('#gPin2').focus(); return; }
+      const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      const u = { id, name, kelas, pin: pinHash(id, pin), t: Date.now() };
+      Ls.push(u); saveProfiles(Ls); login(u);
+    };
+    card.append(brand, h('h1', { id: 'gateTitle', text: 'Profil siswa baru' }), nm, kl, p1, p2, er,
+      h('div', { class: 'gate-row' }, h('button', { class: 'btn sec', type: 'button', onclick: () => showGate(), text: 'Kembali' }), h('button', { class: 'btn', type: 'button', onclick: go, text: 'Buat & masuk' })),
+      h('p', { class: 'gate-note', text: 'Ingat PIN-mu. Guru tidak bisa melihat PIN; kalau lupa, profil hanya bisa dihapus bersama datanya lewat pengaturan browser (hapus data situs).' }));
+    card.querySelectorAll('input').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
+    setTimeout(() => $('#gName').focus(), 30);
+  } else if (view === 'pin') {
+    const u = arg;
+    const head = [brand, h('h1', { id: 'gateTitle', text: u.legacy ? u.name : 'Halo, ' + u.name }), h('p', { class: 'lead', text: u.legacy ? 'Berisi pekerjaan yang tersimpan sebelum ada profil siswa. Data ini tidak ber-PIN: buka untuk mengekspor yang masih diperlukan, lalu hapus.' : (u.kelas ? u.kelas + ' · ' : '') + 'Masukkan PIN untuk membuka pekerjaanmu.' })];
+    if (u.legacy) {
+      card.append(...head, h('div', { class: 'gate-row' }, h('button', { class: 'btn sec', type: 'button', onclick: () => showGate(), text: 'Kembali' }), h('button', { class: 'btn', type: 'button', onclick: () => login(u), text: 'Buka' })),
+        armed(h('button', { class: 'gate-link danger', type: 'button', text: 'Hapus data lama' }), 'Yakin? Klik lagi untuk menghapus data lama', () => { removeProfile(u); showGate('Data lama dihapus.'); }));
+      return;
+    }
+    const pf = field('gPinIn', 'PIN', { type: 'password', inputmode: 'numeric', maxlength: 6 });
+    const go = () => {
+      const now = Date.now();
+      if (now < PROFILE.lockUntil) { er.textContent = 'Terlalu banyak percobaan. Tunggu ' + Math.ceil((PROFILE.lockUntil - now) / 1000) + ' detik.'; return; }
+      const x = profiles().find(v => v.id === u.id);
+      if (!x) { showGate('Profil tidak ditemukan.'); return; }
+      if (x.pin !== pinHash(x.id, $('#gPinIn').value)) {
+        PROFILE.fails++; $('#gPinIn').value = ''; $('#gPinIn').focus();
+        if (PROFILE.fails >= 5) { PROFILE.fails = 0; PROFILE.lockUntil = now + 30000; er.textContent = 'PIN salah 5 kali. Tunggu 30 detik.'; }
+        else er.textContent = 'PIN salah.';
+        return;
+      }
+      PROFILE.fails = 0; login(x);
+    };
+    const del = () => {
+      const x = profiles().find(v => v.id === u.id);
+      if (!x || x.pin !== pinHash(x.id, $('#gPinIn').value)) { er.textContent = 'Masukkan PIN yang benar dulu untuk menghapus profil.'; $('#gPinIn').focus(); return; }
+      return x;
+    };
+    card.append(...head, pf, er, h('div', { class: 'gate-row' }, h('button', { class: 'btn sec', type: 'button', onclick: () => showGate(), text: 'Bukan saya' }), h('button', { class: 'btn', type: 'button', onclick: go, text: 'Masuk' })),
+      armed(h('button', { class: 'gate-link danger', type: 'button', text: 'Hapus profil ini' }), 'Yakin? Klik lagi untuk menghapus profil & semua pekerjaannya', () => { const x = del(); if (x) { removeProfile(x); showGate('Profil ' + x.name + ' dihapus.'); } }, () => !!del()));
+    card.querySelector('#gPinIn').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    setTimeout(() => { const i = document.getElementById('gPinIn'); if (i) i.focus(); }, 30);
+  }
+}
+/* two-step destructive link (no native confirm: it can be blocked inside sandboxed frames) */
+function armed(btn, ask, fn, pre) {
+  let t = null; const txt = btn.textContent;
+  btn.onclick = () => {
+    if (t) { clearTimeout(t); t = null; btn.textContent = txt; fn(); return; }
+    if (pre && !pre()) return;
+    btn.textContent = ask; t = setTimeout(() => { t = null; btn.textContent = txt; }, 6000);
+  };
+  return btn;
+}
+function removeProfile(u) {
+  saveProfiles(profiles().filter(v => v.id !== u.id));
+  store('netlab.u.' + u.id + '.autosave', null); store('netlab.u.' + u.id + '.projects', null);
+}
+/* keluar otomatis bila tidak ada aktivitas (perangkat lab dipakai bergantian) */
+function idleWatch() {
+  const bump = () => { PROFILE.last = Date.now(); };
+  ['pointerdown', 'keydown', 'wheel'].forEach(ev => addEventListener(ev, bump, { capture: true, passive: true }));
+  setInterval(() => { if (PROFILE.cur && !PROFILE.cur.guest && Date.now() - PROFILE.last > IDLE_MIN * 60000) logout('Kamu otomatis keluar karena tidak ada aktivitas selama ' + IDLE_MIN + ' menit. Pekerjaanmu sudah tersimpan.'); }, 30000);
+}
+
 /* ---------- toast / popover / modal ---------- */
 let toastT;
 function toast(msg, ms) {
@@ -10894,10 +11197,11 @@ function changed() {
 }
 NL.onChange = changed;
 function autosave() {
-  store('netlab.autosave', JSON.stringify({ name: UI.projName, data: JSON.parse(NL.serialize(P)), pdus: UI.pdus.map(p => ({ src: p.src, dst: p.dst, dstIp: p.dstIp, color: p.color })) }));
+  if (!PROFILE.cur) return;
+  uset('autosave', JSON.stringify({ name: UI.projName, data: JSON.parse(NL.serialize(P)), pdus: UI.pdus.map(p => ({ src: p.src, dst: p.dst, dstIp: p.dstIp, color: p.color })) }));
   UI.saved = true; renderName();
 }
-function renderName() { const n = $('#projName'); n.textContent = ''; n.append(h('span', { class: 'saved-dot', style: UI.saved ? '' : 'background:var(--warn)' }), UI.projName); n.title = UI.saved ? 'Tersimpan otomatis di perangkat ini' : 'Menyimpan…'; }
+function renderName() { const n = $('#projName'); n.textContent = ''; n.append(h('span', { class: 'saved-dot', style: UI.saved ? '' : 'background:var(--warn)' }), UI.projName); n.title = UI.saved ? (PROFILE.cur && PROFILE.cur.guest ? 'Mode tamu: tersimpan sementara sampai browser ditutup' : 'Tersimpan otomatis di perangkat ini, hanya untuk profil ' + (PROFILE.cur ? PROFILE.cur.name : '')) : 'Menyimpan…'; }
 function loadProject(data, name, pdus) {
   for (const id of Object.keys(UI.wins)) closeWin(id);
   for (const s of [...NL.IOS.sessions]) s.dispose && s.dispose();
@@ -12316,26 +12620,27 @@ function servicesPane(d) {
 function newProject() {
   confirmBox('Proyek baru', 'Area kerja akan dikosongkan. Proyek saat ini tetap ada di daftar "Buka" hanya jika sudah disimpan.', 'Kosongkan', () => { loadProject(NL.newProject(), 'Proyek baru'); P.view = { x: 0, y: 0, z: 1 }; fit(); changed(); toast('Mulai dari area kerja kosong. Pilih perangkat di bawah.'); });
 }
-function savedList() { try { return JSON.parse(store('netlab.projects') || '{}') || {}; } catch (e) { return {}; } }
+function savedList() { try { return JSON.parse(uget('projects') || '{}') || {}; } catch (e) { return {}; } }
 function saveDialog() {
   const inp = h('input', { class: 'inp', id: 'saveName', value: UI.projName });
-  modal('Simpan proyek', [h('p', { class: 'muted', style: 'margin:0', text: 'Proyek disimpan di peramban perangkat ini. Untuk dipindah ke perangkat lain, gunakan Ekspor.' }), h('label', { class: 'cap', for: 'saveName', text: 'Nama proyek' }), inp], [
+  const who = PROFILE.cur && PROFILE.cur.guest ? 'Mode tamu: proyek hanya bertahan sampai browser ditutup. Gunakan Ekspor untuk menyimpannya.' : 'Proyek disimpan di browser perangkat ini, hanya untuk profil ' + (PROFILE.cur ? PROFILE.cur.name : '') + '. Untuk dipindah ke perangkat lain, gunakan Ekspor.';
+  modal('Simpan proyek', [h('p', { class: 'muted', style: 'margin:0', text: who }), h('label', { class: 'cap', for: 'saveName', text: 'Nama proyek' }), inp], [
     h('button', { class: 'btn sec', onclick: closeModal, text: 'Batal' }),
     h('button', { class: 'btn', onclick: () => {
       const name = inp.value.trim() || 'Proyek'; const list = savedList();
       list[name] = { t: Date.now(), data: JSON.parse(NL.serialize(P)) };
-      try { localStorage.setItem('netlab.projects', JSON.stringify(list)); UI.projName = name; autosave(); closeModal(); toast('Tersimpan: ' + name); }
-      catch (e) { toast('Penyimpanan peramban tidak tersedia. Gunakan Ekspor.'); }
+      if (uset('projects', JSON.stringify(list))) { UI.projName = name; autosave(); closeModal(); toast('Tersimpan: ' + name); }
+      else toast('Penyimpanan peramban tidak tersedia atau penuh. Gunakan Ekspor.');
     }, text: 'Simpan' })]);
   setTimeout(() => inp.select(), 30);
 }
 function openDialog() {
   const list = savedList(); const names = Object.keys(list).sort((a, b) => list[b].t - list[a].t);
   const box = h('div', { style: 'display:flex;flex-direction:column;gap:8px' });
-  if (!names.length) box.append(h('div', { class: 'muted', text: 'Belum ada proyek tersimpan di perangkat ini.' }));
+  if (!names.length) box.append(h('div', { class: 'muted', text: PROFILE.cur && PROFILE.cur.guest ? 'Belum ada proyek tersimpan di mode tamu.' : 'Belum ada proyek tersimpan di profilmu di perangkat ini.' }));
   for (const n of names) box.append(h('div', { class: 'lab' }, h('h3', { text: n }), h('div', { class: 'row' },
     h('button', { class: 'btn', onclick: () => { closeModal(); loadProject(list[n].data, n); changed(); toast('Dibuka: ' + n); }, text: 'Buka' }),
-    h('button', { class: 'btn sec', onclick: () => { delete list[n]; try { localStorage.setItem('netlab.projects', JSON.stringify(list)); } catch (e) { } openDialog(); }, text: 'Hapus' })),
+    h('button', { class: 'btn sec', onclick: () => { delete list[n]; uset('projects', JSON.stringify(list)); openDialog(); }, text: 'Hapus' })),
     h('p', { text: 'Disimpan ' + new Date(list[n].t).toLocaleString('id-ID') })));
   const file = h('input', { type: 'file', id: 'impFile', accept: '.json,application/json', onchange: e => {
     const f = e.target.files[0]; if (!f) return; const rd = new FileReader();
@@ -12343,7 +12648,7 @@ function openDialog() {
     rd.readAsText(f);
   } });
   const paste = h('textarea', { class: 'inp', id: 'impPaste', rows: 4, placeholder: 'Tempel kode proyek (JSON) di sini' });
-  modal('Buka proyek', [h('div', { class: 'cap', text: 'Tersimpan di perangkat ini' }), box,
+  modal('Buka proyek', [h('div', { class: 'cap', text: PROFILE.cur && !PROFILE.cur.guest ? 'Proyek milik ' + PROFILE.cur.name : 'Tersimpan (mode tamu)' }), box,
     h('div', { class: 'cap', text: 'Dari file' }), h('div', null, h('label', { class: 'btn sec', for: 'impFile', style: 'display:inline-block;cursor:pointer', text: 'Pilih file .json' }), file),
     h('div', { class: 'cap', text: 'Atau tempel kode' }), paste,
     h('div', { class: 'row' }, h('button', { class: 'btn sec', onclick: () => { try { const j = JSON.parse(paste.value); loadProject(j.netlab ? j.data : j, j.name || 'Proyek impor'); closeModal(); changed(); } catch (e) { toast('Kode tidak valid'); } }, text: 'Buka dari kode' }))]);
@@ -12396,7 +12701,7 @@ function helpDialog() {
       h('li', { html: 'Ketuk PC untuk <b>Desktop</b>: IP Configuration, Command Prompt (ping, tracert, ipconfig, telnet, ssh, nslookup), Web Browser, Terminal (lewat kabel console).' }),
       h('li', { html: 'Saat mengisi IP, panel <b>Rincian jaringan</b> menampilkan prefix, netmask, wildcard, network, broadcast, rentang host, jumlah host, dan bentuk biner. Aplikasi <b>Kalkulator IP</b> di Desktop membantu latihan subnetting.' }),
       h('li', { html: 'Alat <b>PDU</b> (amplop) mengirim ping cepat. Mode <b>Simulasi</b> menampilkan paket berjalan per perangkat.' }),
-      h('li', { html: 'Pekerjaan tersimpan otomatis di perangkat ini. Gunakan <b>Ekspor</b> untuk mengumpulkan tugas atau pindah perangkat.' })),
+      h('li', { html: 'Saat dibuka, pilih <b>profil siswa</b> dan masukkan PIN. Pekerjaan tersimpan otomatis di perangkat ini, <b>terpisah untuk tiap siswa</b>; siswa lain tidak bisa membukanya. Klik nama di pojok kanan atas lalu <b>Keluar</b> setelah selesai (otomatis keluar setelah 30 menit tidak aktif). Gunakan <b>Ekspor</b> untuk mengumpulkan tugas atau pindah perangkat.' })),
     h('h3', { text: 'Router WiFi MikroTik & Winbox' }),
     h('ul', null,
       h('li', { html: 'Tambahkan <b>MikroTik</b> dari panel perangkat. Port: <b>ether1</b> (biasanya ke ISP), <b>ether2–ether5</b> (LAN), dan <b>wlan1</b> (Wi-Fi 2.4 GHz). Router baru membawa konfigurasi default seperti aslinya (192.168.88.1, DHCP, NAT).' }),
@@ -12413,6 +12718,7 @@ function helpDialog() {
     h('ul', null,
       h('li', { html: '<b>PC OS</b> dan <b>Laptop OS</b> datang dengan disk kosong (NVMe, UEFI, Secure Boot, TPM 2.0). Di tab <b>Layar</b>, colokkan <b>flashdisk</b> Windows 11 atau Ubuntu, tekan <b>⏻ Nyalakan</b>, lalu instal seperti aslinya.' }),
       h('li', { html: 'Saat logo muncul: <span class="kbd">F2</span> = UEFI Setup (urutan boot, Secure Boot, TPM, Wi-Fi), <span class="kbd">F12</span> = Boot Menu (boot sekali dari flashdisk/OS lain). Tombolnya juga ada di bar atas layar.' }),
+      h('li', { html: '<b>Drive C: dan D: di Windows 11</b>: buka <b>File Explorer</b> → <b>This PC</b>. Buat drive D: lewat Disk Management (Shrink Volume C:, lalu klik kanan Unallocated → New Simple Volume). Folder baru: tombol <b>New → Folder</b>, klik kanan → New folder, atau <span class="kbd">mkdir</span> di Command Prompt (<span class="kbd">D:</span> untuk pindah drive). Isi drive D: tetap ada walau Windows diinstal ulang di C:.' }),
       h('li', { html: '<b>Dual boot</b>: pasang Windows dulu, kecilkan C: (Disk Management → Shrink Volume) atau langsung pilih <i>Install Ubuntu alongside Windows</i> di installer Ubuntu. GRUB lalu menampilkan Ubuntu dan Windows. Bila Windows dipasang setelah Ubuntu, Windows Boot Manager menjadi urutan pertama: perbaiki lewat UEFI → Boot atau <span class="kbd">sudo update-grub</span> setelah mengaktifkan <span class="kbd">GRUB_DISABLE_OS_PROBER=false</span>.' }),
       h('li', { html: 'Sebagai klien: DHCP otomatis (kabel atau Wi-Fi laptop), Terminal (Windows: <span class="kbd">ipconfig /all</span>, <span class="kbd">netsh</span>, PowerShell; Ubuntu: <span class="kbd">ip a</span>, <span class="kbd">nmcli</span>, <span class="kbd">resolvectl</span>), Edge/Firefox, Outlook/Thunderbird, SSH, dan join domain Active Directory (Windows 11 Pro).' })),
     h('h3', { text: 'Perintah IOS yang didukung' }),
@@ -12498,11 +12804,12 @@ function paletteDrag(btn, type) {
 function boot() {
   buildChrome();
   if (store('netlab.ports') === '0') { UI.ports = false; $('#portTog').classList.remove('on'); }
-  let saved = null;
-  try { saved = JSON.parse(store('netlab.autosave') || 'null'); } catch (e) { saved = null; }
-  if (saved && saved.data) { try { loadProject(saved.data, saved.name, saved.pdus); } catch (e) { saved = null; } }
-  if (!saved || !saved.data) { const sm = NL.SAMPLES.find(x => x.id === 'router'); loadProject(sm.build(), sm.title); }
-  renderPdu();
+  migrateLegacy();
+  loadProject(NL.newProject(), 'Proyek tanpa nama'); renderPdu(); renderUser();
+  /* a reload in the same tab keeps the signed-in profile; a new browser session asks again */
+  const sid = sess('netlab.session'); const u = sid === 'guest' ? { guest: true, id: 'guest', name: 'Tamu' } : sid ? profiles().find(x => x.id === sid) : null;
+  if (u) login(u, true); else showGate();
+  idleWatch();
   addEventListener('resize', () => { applyView(); });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
@@ -14605,7 +14912,7 @@ function Desktop(ctx, root, sys) {
     }
     ov.addEventListener('keydown', e => { if (e.key === 'Escape') { e.stopPropagation(); close(); } });
     root.append(ov);
-    setTimeout(() => { const f = box.querySelector('input:not([disabled]),select,textarea,.wbtn.pri,.wbtn'); if (f) f.focus(); }, 20);
+    setTimeout(() => { const f = box.querySelector('input:not([disabled]),select,textarea,.wbtn.pri,.wbtn'); if (f && !box.contains(document.activeElement)) f.focus(); }, 20);   /* don't steal focus from a field the user already clicked */
     return { close, box, el: ov };
   };
   D.msg = function (title, text, kind, buttons) {
@@ -17229,7 +17536,7 @@ function Shell(ctx, root, sys) {
     for (const b of buttons || []) { const [label, fn, bo] = b; ft.append(WX.wbtn(label, () => { if (fn && fn() === false) return; close(); }, bo || {})); }
     ov.addEventListener('keydown', e => { if (e.key === 'Escape') { e.stopPropagation(); close(); } });
     root.append(ov);
-    setTimeout(() => { const f = box.querySelector('input:not([disabled]),select,textarea,.wbtn.pri,.wbtn'); if (f) f.focus(); }, 20);
+    setTimeout(() => { const f = box.querySelector('input:not([disabled]),select,textarea,.wbtn.pri,.wbtn'); if (f && !box.contains(document.activeElement)) f.focus(); }, 20);   /* don't steal focus from a field the user already clicked */
     return { close, box, el: ov };
   };
   D.msg = function (title, text, kind, buttons) { return D.modal(title, h('div', { style: 'display:flex;gap:12px;align-items:flex-start' }, WX.ico(kind || 'info', 30), h('div', { style: 'white-space:pre-wrap', text })), buttons || [['OK', null, { pri: true }]]); };
@@ -17842,7 +18149,7 @@ function W11Shell(D, mode, admin) {
     if (cmd === 'exit') { S.closed = true; return { items }; }
     if (cmd === 'cls' || cmd === 'clear' || cmd === 'clear-host') return { items: [{ clear: true }] };
     if (cmd === 'help' || cmd === 'get-help' || cmd === '/?') {
-      o('Perintah yang disimulasikan (NetLab):', '  ipconfig [/all|/renew|/release|/flushdns]   hostname   whoami   ver   systeminfo', '  ping   tracert   nslookup [-type=mx]   arp -a   ssh user@ip   curl http://...', '  netsh interface ip set address "Ethernet" static IP MASK GATEWAY  |  ... dhcp', '  netsh interface ip set dns "Ethernet" static DNS  |  ... dhcp', '  netsh wlan show networks | show interfaces | connect name=SSID', '  netsh advfirewall firewall add rule name="ICMP" protocol=icmpv4:8,any dir=in action=allow', '  gpupdate /force   shutdown /r /t 0   shutdown /s /t 0', '  ncpa.cpl  sysdm.cpl  diskmgmt.msc  control  notepad  start msedge http://...');
+      o('Perintah yang disimulasikan (NetLab):', '  ipconfig [/all|/renew|/release|/flushdns]   hostname   whoami   ver   systeminfo', '  ping   tracert   nslookup [-type=mx]   arp -a   ssh user@ip   curl http://...', '  netsh interface ip set address "Ethernet" static IP MASK GATEWAY  |  ... dhcp', '  netsh interface ip set dns "Ethernet" static DNS  |  ... dhcp', '  dir   cd FOLDER   D:   mkdir NAMA   rmdir NAMA   type FILE   (drive C:, D:, ...)', '  netsh wlan show networks | show interfaces | connect name=SSID', '  netsh advfirewall firewall add rule name="ICMP" protocol=icmpv4:8,any dir=in action=allow', '  gpupdate /force   shutdown /r /t 0   shutdown /s /t 0', '  ncpa.cpl  sysdm.cpl  diskmgmt.msc  control  notepad  start msedge http://...');
       if (ps) o('  Get-NetIPAddress  Get-NetIPConfiguration  Get-NetAdapter  New-NetIPAddress  Set-NetIPInterface -Dhcp Enabled', '  Set-DnsClientServerAddress  Test-Connection  Test-NetConnection [-Port]  Resolve-DnsName', '  Rename-Computer -NewName X   Add-Computer -DomainName X   Restart-Computer   Set-NetConnectionProfile');
       o(''); return { items };
     }
@@ -17883,8 +18190,7 @@ function W11Shell(D, mode, admin) {
     if (cmd === 'whoami') { const s = D.sess(); o((s.domain ? s.domain : W.name).toLowerCase() + '\\' + s.name.toLowerCase()); return { items }; }
     if (cmd === 'ver') { o('', 'Microsoft Windows [Version ' + COS.WINVER.ver + ']', ''); return { items }; }
     if (cmd === 'echo') { o(args.join(' ')); return { items }; }
-    if (cmd === 'cd' || cmd === 'set-location' || cmd === 'chdir') { if (!args[0]) { o(cwd); return { items }; } const k = WIN.normPath(/^[a-z]:/i.test(args[0]) ? args[0] : args[0] === '..' ? cwd.replace(/\\[^\\]*$/, '') : cwd + '\\' + args[0]); if (WX.dirExists(W, k)) cwd = WX.disp(W, k).replace(/^%systemdrive%/i, 'C:') || 'C:\\'; else o(ps ? 'Set-Location : Cannot find path \'' + args[0] + '\' because it does not exist.' : 'The system cannot find the path specified.'); return { items }; }
-    if (cmd === 'dir' || cmd === 'ls' || cmd === 'get-childitem') { const k = WIN.normPath(cwd); const pre = k + '\\'; const ds = new Set(); const fs = []; for (const x of WX.baseDirs(W).concat(W.dirs || [])) if (x.startsWith(pre) && !x.slice(pre.length).includes('\\')) ds.add(x); for (const f of Object.keys(W.files)) if (f.startsWith(pre) && !f.slice(pre.length).includes('\\')) fs.push(f); o('', ps ? '    Directory: ' + cwd : ' Directory of ' + cwd, ''); for (const x of [...ds].sort()) o((ps ? 'd----   ' : '<DIR>          ') + WX.disp(W, x).split('\\').pop()); for (const f of fs.sort()) o((ps ? '-a---   ' : '               ') + WX.disp(W, f).split('\\').pop()); o(''); return { items }; }
+    if (W11.fsCmd && W11.fsCmd(D, cmd, args, al, ps, () => cwd, v => { cwd = v; }, (...x) => o(...x), admin)) return { items };
     if (cmd === 'systeminfo') { const hwI = hw(d); o('', 'Host Name:                     ' + W.name, 'OS Name:                       Microsoft ' + W.edition, 'OS Version:                    10.0.' + COS.WINVER.build.split('.')[0] + ' N/A Build ' + COS.WINVER.build.split('.')[0], 'OS Manufacturer:               Microsoft Corporation', 'OS Configuration:              ' + (W.domain ? 'Member Workstation' : 'Standalone Workstation'), 'Registered Owner:              ' + ((W.users[0] || {}).name || 'user'), 'System Manufacturer:           NetLab', 'System Model:                  ' + hwI.product, 'System Type:                   x64-based PC', 'BIOS Version:                  ' + hwI.bios, 'Total Physical Memory:         ' + hwI.ram.toLocaleString('en-US') + ' MB', 'Domain:                        ' + (W.domain || W.workgroup), 'Logon Server:                  \\\\' + (W.domain ? (Pj().devices[W.dc] ? Pj().devices[W.dc].os.win.name : 'DC') : W.name), 'Network Card(s):               ' + adapters(D).length + ' NIC(s) Installed.'); adapters(D).forEach((x, i) => o('                               [0' + (i + 1) + ']: ' + x.desc, '                                     Connection Name: ' + x.name, x.up ? '                                     DHCP Enabled:    ' + (x.cfg.auto ? 'Yes' : 'No') : '                                     Status:          Media disconnected', x.up && x.p.ip ? '                                     IP address(es)\n                                     [01]: ' + x.p.ip : null)); o('Hyper-V Requirements:          A hypervisor has been detected.', ''); return { items }; }
     if (cmd === 'gpupdate') { o('Updating policy...', ''); o({ wait: 1200, text: 'Computer Policy update has completed successfully.' }, 'User Policy update has completed successfully.', ''); return { items }; }
     if (cmd === 'shutdown') { if (al.includes('/r')) { o(''); setTimeout(() => D.restart(), 600); return { items }; } if (al.includes('/s')) { o(''); setTimeout(() => D.shutdown(), 600); return { items }; } o('Usage: shutdown [/i | /l | /s | /sg | /r | /g | /a | /p | /h | /e | /o] [/hybrid] [/soft] [/fw] [/f]', ''); return { items }; }
@@ -18232,6 +18538,550 @@ A.run = { title: 'Run', icon: 'run', w: 420, h: 210, make(D, W) {
   setTimeout(() => { f.focus(); f.select(); }, 30);
 } };
 
+})();
+/* ===================== NetLab: Windows 11 drives & File Explorer (This PC, C:, D:, folders) ===================== */
+(function () {
+const NL = globalThis.NL; const COS = NL.COS; const WIN = NL.OS.WIN; const WX = NL.VM.WX; const CUI = NL.CUI; const W11 = CUI.W11;
+const L = () => NL.UI.lib;
+const h = (...a) => L().h(...a);
+const { ico, uid } = W11;
+const A = W11.APPS;
+
+/* ---------- extra icons ---------- */
+Object.assign(W11.I, {
+  thispc: '<rect x="2.5" y="4" width="19" height="12.5" rx="1.6" fill="#2b88d8"/><rect x="4" y="5.5" width="16" height="9.5" rx=".8" fill="#9fd3ff"/><path d="M9 20h6M12 16.5V20" stroke="#4a5866" stroke-width="1.6" stroke-linecap="round"/>',
+  drivec: '<rect x="2.5" y="7" width="19" height="10.5" rx="1.8" fill="#c9d3dc"/><rect x="2.5" y="14" width="19" height="3.5" rx="1" fill="#8d99a6"/><circle cx="18" cy="15.8" r=".9" fill="#57d163"/><rect x="5" y="8.6" width="2.4" height="2.4" fill="#f25022"/><rect x="7.7" y="8.6" width="2.4" height="2.4" fill="#7fba00"/><rect x="5" y="11.3" width="2.4" height="2.4" fill="#00a4ef"/><rect x="7.7" y="11.3" width="2.4" height="2.4" fill="#ffb900"/>',
+  drive: '<rect x="2.5" y="7" width="19" height="10.5" rx="1.8" fill="#c9d3dc"/><rect x="2.5" y="14" width="19" height="3.5" rx="1" fill="#8d99a6"/><circle cx="18" cy="15.8" r=".9" fill="#57d163"/>',
+  folder: '<path d="M2.5 6.5a2 2 0 0 1 2-2h5l2 2h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2z" fill="#e8a91a"/><path d="M2.5 9h19v9a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2z" fill="#ffcb47"/>',
+  fdesk: '<path d="M2.5 6.5a2 2 0 0 1 2-2h5l2 2h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2z" fill="#2a7de1"/><path d="M2.5 9h19v9a2 2 0 0 1-2 2h-15a2 2 0 0 1-2-2z" fill="#58a6ff"/>',
+  fdown: '<circle cx="12" cy="12" r="9.5" fill="#1f9e5a"/><path d="M12 6.5v8M8.3 11l3.7 3.7 3.7-3.7M7.5 17.5h9" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  fdocs: '<path d="M6 2.5h8l4.5 4.5V21a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5z" fill="#5b8def"/><path d="M14 2.5V7h4.5" fill="#a9c4ff"/><path d="M8.5 11h7M8.5 14h7M8.5 17h5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>',
+  fpics: '<rect x="3" y="4" width="18" height="16" rx="2.5" fill="#2bb3c0"/><circle cx="9" cy="10" r="2" fill="#fff"/><path d="M4 18l5-5 3 3 3-3 5 5" fill="#c5f3f7"/>',
+  fmusic: '<circle cx="12" cy="12" r="9.5" fill="#e25b45"/><path d="M10 16.5V8l6-1.5v8" stroke="#fff" stroke-width="1.6" fill="none"/><circle cx="8.8" cy="16.5" r="1.6" fill="#fff"/><circle cx="14.8" cy="14.5" r="1.6" fill="#fff"/>',
+  fvids: '<rect x="3" y="5" width="18" height="14" rx="2.5" fill="#8a4fd6"/><path d="M10 9v6l5-3z" fill="#fff"/>',
+  home: '<path d="M4 11l8-6.5 8 6.5V20H4z" fill="#f0b43c"/><rect x="10" y="14" width="4" height="6" fill="#fff"/>',
+  netw: '<rect x="3" y="4" width="18" height="11" rx="1.6" fill="#5d6d7e"/><path d="M12 15v3M6 20h12" stroke="#5d6d7e" stroke-width="1.6" stroke-linecap="round"/><path d="M7 9.5h10" stroke="#9fd3ff" stroke-width="1.4"/>',
+  txt: '<path d="M6 2.5h8l4.5 4.5V21a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5z" fill="#fff" stroke="#8d99a6"/><path d="M14 2.5V7h4.5" fill="#dfe6ec" stroke="#8d99a6"/><path d="M8.5 11h7M8.5 14h7M8.5 17h5" stroke="#5d6d7e" stroke-width="1.1" stroke-linecap="round"/>',
+  newf: '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  rename: '<rect x="3" y="7" width="18" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 10v4M15 5v14M13 5h4M13 19h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>',
+  trash: '<path d="M6 7h12l-1 13H7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.5 7h15M9.5 7V4.5h5V7M10 10.5v6M14 10.5v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>',
+  fwd: '<path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>',
+  up: '<path d="M12 19V6M6.5 11.5L12 6l5.5 5.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  refresh: '<path d="M19 12a7 7 0 1 1-2-4.9" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M17.5 3.5V7.5H13.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+});
+
+/* ---------- volumes (same lettering as Disk Management) ---------- */
+const FS = W11.FS = {};
+FS.vols = function (d) {
+  const w = COS.inst(d, 'windows'); const out = []; let letter = 68;
+  for (const p of COS.layout(d)) {
+    if (p.free || p.role === 'msr') continue;
+    if (w && w.parts && w.parts.sys === p.num) { out.push({ letter: 'C:', sys: true, p, label: '', fs: 'NTFS', size: p.size, used: p.used || 0 }); continue; }
+    if (p.role === 'esp' || p.role === 'recovery') continue;
+    if (p.fs === 'ntfs' || p.fs === 'fat32' || p.fs === 'exfat') {
+      const lt = p.letter || String.fromCharCode(letter++) + ':';
+      out.push({ letter: lt, p, label: p.label && p.label !== 'Basic data partition' ? p.label : '', fs: p.fs.toUpperCase(), size: p.size, used: p.used || 0 });
+    }
+  }
+  return out.sort((a, b) => a.letter.localeCompare(b.letter));
+};
+FS.volName = v => (v.label || 'Local Disk') + ' (' + v.letter + ')';
+const ILLEGAL = /[\\/:*?"<>|]/;
+const RESERVED = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(\..*)?$/i;
+/* path "D:\Foto\2024" → location on its volume. C: lives in the Windows install (w.dirs / w.files, keys "%systemdrive%\..."),
+   other volumes keep their own folders on the partition (p.data), so they survive a Windows reinstall like a real D: drive. */
+function loc(d, w, path) {
+  const s = String(path || '').trim().replace(/\//g, '\\').replace(/^%systemdrive%/i, 'C:');
+  const m = /^([a-z]):(\\.*)?$/i.exec(s); if (!m) return null;
+  const letter = m[1].toUpperCase() + ':';
+  const segs = (m[2] || '').split('\\').filter(Boolean);
+  const v = FS.vols(d).find(x => x.letter === letter);
+  if (!v) return { letter, missing: true, segs };
+  if (v.sys) return { letter, v, sys: true, segs, key: WIN.normPath('C:' + (segs.length ? '\\' + segs.join('\\') : '')) };
+  const st = v.p.data || (v.p.data = { dirs: [], files: {}, names: {}, times: {} });
+  return { letter, v, st, segs, key: segs.join('\\').toLowerCase() };
+}
+FS.loc = loc;
+const parentKey = (l, key) => l.sys ? key.replace(/\\[^\\]*$/, '') : key.includes('\\') ? key.replace(/\\[^\\]*$/, '') : '';
+const childKey = (l, key, name) => l.sys ? key + '\\' + name.toLowerCase() : (key ? key + '\\' : '') + name.toLowerCase();
+const times = (d, w, l) => l.sys ? (w.ftimes || (w.ftimes = {})) : l.st.times;
+function touch(d, w, l, key) { times(d, w, l)[key] = Date.now(); }
+/* display path of a key on volume l */
+function dispOf(w, l, key) {
+  if (l.sys) return WX.disp(w, key).replace(/^%systemdrive%/i, 'C:') + (key === '%systemdrive%' ? '\\' : '');
+  if (!key) return l.letter + '\\';
+  const parts = key.split('\\'); const out = [];
+  for (let i = 1; i <= parts.length; i++) { const k = parts.slice(0, i).join('\\'); out.push(l.st.names[k] || parts[i - 1]); }
+  return l.letter + '\\' + out.join('\\');
+}
+FS.disp = (d, w, path) => { const l = loc(d, w, path); return l && !l.missing ? dispOf(w, l, l.key) : path; };
+function isDir(w, l, key) {
+  if (l.sys) return WIN.dirExists(w, key);
+  if (!key) return true;
+  return l.st.dirs.includes(key) || l.st.dirs.some(x => x.startsWith(key + '\\')) || Object.keys(l.st.files).some(f => f.startsWith(key + '\\'));
+}
+FS.isDir = (d, w, path) => { const l = loc(d, w, path); return !!(l && !l.missing && isDir(w, l, l.key)); };
+FS.isFile = (d, w, path) => { const l = loc(d, w, path); if (!l || l.missing) return false; return l.sys ? w.files[l.key] != null : l.st.files[l.key] != null; };
+function filesOf(w, l) { return l.sys ? w.files : l.st.files; }
+FS.list = function (d, w, path) {
+  const l = loc(d, w, path); if (!l || l.missing || !isDir(w, l, l.key)) return null;
+  const pre = l.sys ? l.key + '\\' : l.key ? l.key + '\\' : '';
+  const dirs = new Set(), files = [];
+  const allDirs = l.sys ? WIN.baseDirs(w).concat(w.dirs || []) : l.st.dirs;
+  for (const x of allDirs) if (x.startsWith(pre) && x !== l.key && !x.slice(pre.length).includes('\\') && x.length > pre.length) dirs.add(x);
+  for (const f of Object.keys(filesOf(w, l))) if (f.startsWith(pre)) { const rest = f.slice(pre.length); if (rest.includes('\\')) dirs.add(pre + rest.split('\\')[0]); else files.push(f); }
+  const T = times(d, w, l);
+  const nm = k => dispOf(w, l, k).split('\\').filter(Boolean).pop();
+  return {
+    loc: l,
+    dirs: [...dirs].map(k => ({ key: k, name: nm(k), dir: true, t: T[k] || null, sys: l.sys && WIN.baseDirs(w).includes(k) })).sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })),
+    files: files.map(k => ({ key: k, name: nm(k), size: String(filesOf(w, l)[k] || '').length, t: T[k] || null })).sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })),
+  };
+};
+/* write access rules (simplified Windows ACLs) */
+function guard(D, l, key, isFile) {
+  if (!l.sys) return null;
+  const s = D.sess(); const prof = '%systemdrive%\\users\\' + String(s.profile || '').toLowerCase();
+  if (/^%systemdrive%\\(windows|program files|program files \(x86\)|programdata)(\\|$)/.test(key)) return 'admin';
+  if (key === '%systemdrive%' && isFile) return 'admin';
+  if (/^%systemdrive%\\users\\[^\\]+/.test(key) && !(key === prof || key.startsWith(prof + '\\')) && !/^%systemdrive%\\users\\public(\\|$)/.test(key)) return s.admin ? 'admin' : 'deny';
+  if (key === '%systemdrive%\\users') return 'admin';
+  return null;
+}
+function validName(name) {
+  const n = String(name || '').trim();
+  if (!n) return 'empty';
+  if (ILLEGAL.test(n)) return 'A file name can\'t contain any of the following characters:\n\\ / : * ? " < > |';
+  if (RESERVED.test(n)) return 'The specified device name is invalid.';
+  if (/\.$/.test(n)) return 'The file name is not valid.';
+  return null;
+}
+FS.validName = validName;
+FS.mkdir = function (d, w, dirPath, name) {
+  const l = loc(d, w, dirPath); if (!l || l.missing) return { err: 'nodrive' };
+  const k = childKey(l, l.key, name);
+  if (isDir(w, l, k) || (l.sys ? w.files[k] != null : l.st.files[k] != null)) return { err: 'exists', key: k };
+  if (l.sys) { WX.mkdir(w, k, dispOf(w, l, l.key).replace(/\\$/, '') + '\\' + name); w.fnames = w.fnames || {}; w.fnames[k] = dispOf(w, l, l.key).replace(/\\$/, '') + '\\' + name; }
+  else { const parts = k.split('\\'); for (let i = 1; i <= parts.length; i++) { const p = parts.slice(0, i).join('\\'); if (!l.st.dirs.includes(p)) l.st.dirs.push(p); } l.st.names[k] = name; }
+  touch(d, w, l, k); return { key: k, loc: l };
+};
+FS.writeFile = function (d, w, path, text) {
+  const l = loc(d, w, path); if (!l || l.missing || !l.segs.length) return { err: 'nodrive' };
+  const name = l.segs[l.segs.length - 1]; const pk = parentKey(l, l.key);
+  if (!isDir(w, l, pk)) return { err: 'nodir' };
+  if (l.sys) WX.writeFile(w, dispOf(w, l, pk).replace(/\\$/, '') + '\\' + name, text);
+  else { l.st.files[l.key] = text; if (!l.st.names[l.key]) l.st.names[l.key] = name; }
+  touch(d, w, l, l.key); return { key: l.key, loc: l };
+};
+FS.readFile = function (d, w, path) { const l = loc(d, w, path); if (!l || l.missing) return null; const v = l.sys ? w.files[l.key] : l.st.files[l.key]; return v == null ? null : String(v); };
+FS.remove = function (d, w, path) {
+  const l = loc(d, w, path); if (!l || l.missing) return { err: 'nodrive' };
+  if (l.sys && WIN.baseDirs(w).includes(l.key)) return { err: 'system' };
+  const k = l.key; const under = x => x === k || x.startsWith(k + '\\');
+  if (l.sys) { w.dirs = (w.dirs || []).filter(x => !under(x)); for (const f of Object.keys(w.files)) if (under(f)) delete w.files[f]; for (const f of Object.keys(w.fnames || {})) if (under(f)) delete w.fnames[f]; }
+  else { l.st.dirs = l.st.dirs.filter(x => !under(x)); for (const f of Object.keys(l.st.files)) if (under(f)) delete l.st.files[f]; for (const f of Object.keys(l.st.names)) if (under(f)) delete l.st.names[f]; }
+  const T = times(d, w, l); for (const f of Object.keys(T)) if (under(f)) delete T[f];
+  return { ok: true };
+};
+FS.rename = function (d, w, path, newName) {
+  const l = loc(d, w, path); if (!l || l.missing) return { err: 'nodrive' };
+  if (l.sys && WIN.baseDirs(w).includes(l.key)) return { err: 'system' };
+  const k = l.key; const pk = parentKey(l, k); const nk = childKey(l, pk, newName);
+  const under = x => x === k || x.startsWith(k + '\\'); const mv = x => nk + x.slice(k.length);
+  if (nk !== k && (isDir(w, l, nk) || filesOf(w, l)[nk] != null)) return { err: 'exists' };
+  const oldDisp = dispOf(w, l, k), newDisp = dispOf(w, l, pk).replace(/\\$/, '') + '\\' + newName;
+  if (l.sys) {
+    w.dirs = (w.dirs || []).map(x => under(x) ? mv(x) : x);
+    for (const f of Object.keys(w.files)) if (under(f) && nk !== k) { w.files[mv(f)] = w.files[f]; delete w.files[f]; }
+    const fn = w.fnames || (w.fnames = {}); const add = {};
+    for (const f of Object.keys(fn)) if (under(f)) { add[mv(f)] = newDisp + fn[f].slice(oldDisp.length); if (mv(f) !== f) delete fn[f]; }
+    Object.assign(fn, add); fn[nk] = newDisp;
+    if (!(w.dirs || []).includes(nk) && WIN.dirExists(w, nk) === false && w.files[nk] == null) w.dirs.push(nk);
+  } else {
+    l.st.dirs = l.st.dirs.map(x => under(x) ? mv(x) : x);
+    for (const f of Object.keys(l.st.files)) if (under(f) && nk !== k) { l.st.files[mv(f)] = l.st.files[f]; delete l.st.files[f]; }
+    const nm = {}; for (const f of Object.keys(l.st.names)) { if (under(f)) { if (f !== k) nm[mv(f)] = l.st.names[f]; } else nm[f] = l.st.names[f]; }
+    nm[nk] = newName; l.st.names = nm;
+  }
+  const T = times(d, w, l); const t2 = {}; for (const f of Object.keys(T)) t2[under(f) ? mv(f) : f] = T[f]; t2[nk] = Date.now(); if (l.sys) w.ftimes = t2; else l.st.times = t2;
+  return { ok: true, key: nk };
+};
+FS.uniqueName = function (d, w, dirPath, base, ext) {
+  const l = loc(d, w, dirPath); const exists = n => { const k = childKey(l, l.key, n); return isDir(w, l, k) || filesOf(w, l)[k] != null; };
+  let n = base + (ext || ''); let i = 2; while (exists(n)) n = base + ' (' + (i++) + ')' + (ext || ''); return n;
+};
+const fmtTime = t => { if (!t) return ''; const x = new Date(t); return x.toLocaleDateString('en-US') + ' ' + x.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); };
+FS.fmtTime = fmtTime;
+const gbs = mb => { const g = mb / 1024; return (g >= 100 ? g.toFixed(0) : g >= 10 ? g.toFixed(1) : g.toFixed(2)).replace(/\.0+$/, '') + ' GB'; };
+const fsize = n => n < 1024 ? (n ? '1 KB' : '0 KB') : Math.ceil(n / 1024).toLocaleString('en-US') + ' KB';
+const ftype = name => { const e = (name.split('.').length > 1 ? name.split('.').pop() : '').toLowerCase(); return { txt: 'Text Document', html: 'Microsoft Edge HTML Document', htm: 'Microsoft Edge HTML Document', exe: 'Application', bat: 'Windows Batch File', cmd: 'Windows Command Script', log: 'Text Document', ini: 'Configuration settings', md: 'MD File', csv: 'Microsoft Excel Comma Separated Values File' }[e] || (e ? e.toUpperCase() + ' File' : 'File'); };
+
+/* ===================== File Explorer (Windows 11) ===================== */
+A.explorer = { title: 'File Explorer', icon: 'explorer', single: false, w: 900, h: 560, cls: 'w11-fe', make(D, W, start) {
+  const d = D.d; const w = () => D.w();
+  let cur = null; const back = [], fwd = []; let sel = null; let filter = ''; let renaming = null; let tick = null; let lastSig = '';
+  const quick = () => { const hm = D.home(); return [['Desktop', 'fdesk', hm + '\\Desktop'], ['Downloads', 'fdown', hm + '\\Downloads'], ['Documents', 'fdocs', hm + '\\Documents'], ['Pictures', 'fpics', hm + '\\Pictures'], ['Music', 'fmusic', hm + '\\Music'], ['Videos', 'fvids', hm + '\\Videos']]; };
+  const tb = (icon, label, fn, o) => h('button', Object.assign({ type: 'button', class: 'fe-cb', onclick: fn, title: label, 'aria-label': label }, o || {}), ico(icon, 18), h('span', { text: label }));
+  const bBack = h('button', { type: 'button', class: 'fe-nb', 'aria-label': 'Back', title: 'Back', onclick: () => { if (back.length) { fwd.push(cur); go(back.pop(), true); } } }, ico('back', 16));
+  const bFwd = h('button', { type: 'button', class: 'fe-nb', 'aria-label': 'Forward', title: 'Forward', onclick: () => { if (fwd.length) { back.push(cur); go(fwd.pop(), true); } } }, ico('fwd', 16));
+  const bUp = h('button', { type: 'button', class: 'fe-nb', 'aria-label': 'Up', title: 'Up', onclick: up }, ico('up', 16));
+  const bRef = h('button', { type: 'button', class: 'fe-nb', 'aria-label': 'Refresh', title: 'Refresh', onclick: () => draw() }, ico('refresh', 16));
+  const crumbs = h('div', { class: 'fe-crumbs', tabindex: '0', role: 'button', 'aria-label': 'Address', onclick: e => { if (!e.target.closest('.fe-crumb')) editAddr(); }, onkeydown: e => { if (e.key === 'Enter' || e.key === 'F4') editAddr(); } });
+  const addrIn = h('input', { class: 'fe-addr', type: 'text', 'aria-label': 'Address', spellcheck: 'false', autocomplete: 'off', hidden: true });
+  const srch = h('input', { class: 'fe-search', type: 'search', 'aria-label': 'Search', placeholder: 'Search', autocomplete: 'off', oninput: () => { filter = srch.value.trim().toLowerCase(); drawMain(); } });
+  const bNew = tb('newf', 'New', e => newMenu(e.currentTarget));
+  const bRen = tb('rename', 'Rename', () => sel && cur !== 'pc' && cur !== 'home' && startRename(sel));
+  const bDel = tb('trash', 'Delete', () => sel && cur !== 'pc' && cur !== 'home' && del(sel));
+  const nav = h('nav', { class: 'fe-nav', 'aria-label': 'Navigation pane' });
+  const main = h('div', { class: 'fe-main', tabindex: '-1', oncontextmenu: e => { if (!e.target.closest('.fe-row,.fe-drive')) { e.preventDefault(); bgMenu(e); } } });
+  const status = h('div', { class: 'fe-status' });
+  W.body.append(
+    h('div', { class: 'fe-top' }, bBack, bFwd, bUp, bRef, h('div', { class: 'fe-addrwrap' }, crumbs, addrIn), srch),
+    h('div', { class: 'fe-cmd' }, bNew, h('span', { class: 'fe-sep' }), bRen, bDel),
+    h('div', { class: 'fe-body' }, nav, main), status);
+  addrIn.addEventListener('keydown', e => { if (e.key === 'Enter') { const v = addrIn.value.trim(); addrIn.hidden = true; crumbs.hidden = false; openPath(v); } else if (e.key === 'Escape') { addrIn.hidden = true; crumbs.hidden = false; } });
+  addrIn.addEventListener('blur', () => { addrIn.hidden = true; crumbs.hidden = false; });
+  function editAddr() { crumbs.hidden = true; addrIn.hidden = false; addrIn.value = cur === 'pc' ? 'This PC' : cur === 'home' ? 'Home' : cur; addrIn.focus(); addrIn.select(); }
+  function openPath(v) {
+    if (!v) return; const lv = v.toLowerCase();
+    if (lv === 'this pc' || lv === 'computer') { go('pc'); return; }
+    if (lv === 'home' || lv === 'quick access') { go('home'); return; }
+    const sp = { desktop: 0, downloads: 1, documents: 2, pictures: 3, music: 4, videos: 5 }[lv]; if (sp != null) { go(quick()[sp][2]); return; }
+    let p = v.replace(/\//g, '\\'); if (/^[a-z]:$/i.test(p)) p += '\\';
+    const l = loc(d, w(), p);
+    if (!l) { D.msg('File Explorer', 'Windows can\'t find \'' + v + '\'. Check the spelling and try again.', 'err'); return; }
+    if (l.missing) { D.msg('Location is not available', p.slice(0, 2).toUpperCase() + '\\ is not accessible.\n\nThe system cannot find the drive specified.', 'err'); return; }
+    if (FS.isFile(d, w(), p)) { openFile(FS.disp(d, w(), p)); return; }
+    if (!isDir(w(), l, l.key)) { D.msg('File Explorer', 'Windows can\'t find \'' + v + '\'. Check the spelling and try again.', 'err'); return; }
+    go(dispOf(w(), l, l.key));
+  }
+  function access(path) {
+    const l = loc(d, w(), path); if (!l || l.missing) return true;
+    const g = guard(D, l, l.key, false);
+    if (g === 'deny' && !/^%systemdrive%\\users$/.test(l.key)) { D.msg(FS.disp(d, w(), path).split('\\').pop(), 'You don\'t currently have permission to access this folder.\n\nAkses ditolak: folder ini milik pengguna lain di PC ini.', 'err'); return false; }
+    return true;
+  }
+  function go(p, viaHist) {
+    if (p !== 'pc' && p !== 'home' && !access(p)) return;
+    if (!viaHist && cur && cur !== p) { back.push(cur); fwd.length = 0; }
+    cur = p; sel = null; filter = ''; srch.value = ''; renaming = null; draw();
+  }
+  function up() {
+    if (cur === 'pc' || cur === 'home') { go('pc'); return; }
+    const l = loc(d, w(), cur); if (!l || l.missing) { go('pc'); return; }
+    if (!l.segs.length) { go('pc'); return; }
+    go(dispOf(w(), l, parentKey(l, l.key)));
+  }
+  const sig = () => FS.vols(d).map(v => v.letter + v.size + (v.label || '')).join('|');
+  function drawNav() {
+    nav.textContent = '';
+    const it = (icon, label, target, extra) => { const on = cur === target || (target !== 'pc' && target !== 'home' && cur && cur.toLowerCase() === String(target).toLowerCase()); return h('button', Object.assign({ type: 'button', class: 'fe-ni' + (on ? ' on' : ''), onclick: () => go(target) }, extra || {}), ico(icon, 16), h('span', { text: label })); };
+    nav.append(it('home', 'Home', 'home'), h('hr'));
+    for (const [n, i, p] of quick()) nav.append(it(i, n, p));
+    nav.append(h('hr'), it('thispc', 'This PC', 'pc'));
+    for (const v of FS.vols(d)) nav.append(it(v.sys ? 'drivec' : 'drive', FS.volName(v), v.letter + '\\', { style: 'padding-left:22px' }));
+    nav.append(h('button', { type: 'button', class: 'fe-ni', onclick: () => D.notSim('Network (berbagi folder lewat jaringan)') }, ico('netw', 16), h('span', { text: 'Network' })));
+  }
+  function setCrumbs() {
+    crumbs.textContent = '';
+    const add = (label, target, icon) => { if (crumbs.childNodes.length) crumbs.append(h('span', { class: 'fe-chev', 'aria-hidden': 'true', text: '›' })); crumbs.append(h('button', { type: 'button', class: 'fe-crumb', onclick: e => { e.stopPropagation(); go(target); } }, icon ? ico(icon, 16) : null, label ? h('span', { text: label }) : null)); };
+    if (cur === 'home') { add('Home', 'home', 'home'); return; }
+    add('', 'pc', 'thispc'); add('This PC', 'pc');
+    if (cur === 'pc') return;
+    const l = loc(d, w(), cur); if (!l || l.missing) return;
+    add(FS.volName(l.v), l.letter + '\\');
+    let k = l.sys ? '%systemdrive%' : '';
+    for (const s of l.segs) { k = childKey(l, k, s); const disp = dispOf(w(), l, k); add(disp.split('\\').pop(), disp); }
+  }
+  function draw() {
+    if (cur !== 'pc' && cur !== 'home') { const l = loc(d, w(), cur); if (!l || l.missing || !isDir(w(), l, l.key)) cur = 'pc'; }
+    lastSig = sig();
+    W.setTitle(cur === 'pc' ? 'This PC' : cur === 'home' ? 'Home' : (() => { const l = loc(d, w(), cur); return l.segs.length ? dispOf(w(), l, l.key).split('\\').pop() : FS.volName(l.v); })());
+    bBack.disabled = !back.length; bFwd.disabled = !fwd.length; bUp.disabled = cur === 'pc';
+    srch.placeholder = 'Search ' + (cur === 'pc' ? 'This PC' : cur === 'home' ? 'Home' : W.title);
+    setCrumbs(); drawNav(); drawMain();
+  }
+  function items() {
+    if (cur === 'pc' || cur === 'home') return [];
+    const r = FS.list(d, w(), cur); if (!r) return [];
+    return r.dirs.concat(r.files).filter(x => !filter || x.name.toLowerCase().includes(filter));
+  }
+  function drawMain() {
+    main.textContent = ''; const canEdit = cur !== 'pc' && cur !== 'home';
+    bNew.disabled = !canEdit; bRen.disabled = !sel || !canEdit; bDel.disabled = !sel || !canEdit;
+    if (cur === 'pc') {
+      const vols = FS.vols(d).filter(v => !filter || FS.volName(v).toLowerCase().includes(filter));
+      main.append(h('h3', { class: 'fe-h', text: 'Devices and drives' }));
+      const grid = h('div', { class: 'fe-drives' });
+      for (const v of vols) {
+        const used = Math.min(v.size, v.used + (v.sys ? 0 : Math.ceil(dataBytes(v) / 1048576)));
+        const pct = v.size ? used / v.size : 0;
+        grid.append(h('button', { type: 'button', class: 'fe-drive' + (sel === v.letter ? ' sel' : ''), ondblclick: () => go(v.letter + '\\'), onclick: e => { if (e.pointerType && e.pointerType !== 'mouse' && sel === v.letter) go(v.letter + '\\'); else { sel = v.letter; drawMain(); } }, onkeydown: e => { if (e.key === 'Enter') go(v.letter + '\\'); }, 'aria-label': FS.volName(v) + ', ' + gbs(v.size - used) + ' free of ' + gbs(v.size) },
+          ico(v.sys ? 'drivec' : 'drive', 40), h('span', { class: 'fe-dinfo' }, h('b', { text: FS.volName(v) }), h('span', { class: 'fe-bar' + (pct > 0.9 ? ' full' : '') }, h('i', { style: 'width:' + Math.max(1, Math.round(pct * 100)) + '%' })), h('small', { text: gbs(v.size - used) + ' free of ' + gbs(v.size) }))));
+      }
+      main.append(grid);
+      if (FS.vols(d).filter(v => !v.sys).length === 0) main.append(h('div', { class: 'fe-tip', text: 'NetLab: PC ini baru punya drive C:. Untuk membuat drive D:, buka Disk Management (klik kanan Start), Shrink Volume C:, lalu klik kanan Unallocated → New Simple Volume dan pilih huruf D:.' }));
+      status.textContent = vols.length + ' item' + (vols.length === 1 ? '' : 's') + (sel ? '    1 item selected' : '');
+      return;
+    }
+    if (cur === 'home') {
+      main.append(h('h3', { class: 'fe-h', text: 'Quick access' }));
+      const grid = h('div', { class: 'fe-quick' });
+      for (const [n, i, p] of quick()) grid.append(h('button', { type: 'button', class: 'fe-qa', ondblclick: () => go(p), onclick: e => { if (e.pointerType && e.pointerType !== 'mouse') go(p); }, onkeydown: e => { if (e.key === 'Enter') go(p); } }, ico(i, 34), h('span', null, h('b', { text: n }), h('small', { text: 'Stored locally' }))));
+      main.append(grid, h('h3', { class: 'fe-h', text: 'Drives' }));
+      const dg = h('div', { class: 'fe-quick' });
+      for (const v of FS.vols(d)) dg.append(h('button', { type: 'button', class: 'fe-qa', ondblclick: () => go(v.letter + '\\'), onclick: e => { if (e.pointerType && e.pointerType !== 'mouse') go(v.letter + '\\'); } }, ico(v.sys ? 'drivec' : 'drive', 34), h('span', null, h('b', { text: FS.volName(v) }), h('small', { text: gbs(v.size) }))));
+      main.append(dg);
+      status.textContent = quick().length + ' items';
+      return;
+    }
+    const list = items();
+    const tbl = h('table', { class: 'fe-tbl' }, h('thead', null, h('tr', null, h('th', { text: 'Name' }), h('th', { text: 'Date modified' }), h('th', { text: 'Type' }), h('th', { text: 'Size' }))));
+    const bd = h('tbody'); tbl.append(bd);
+    for (const x of list) {
+      const path = FS.disp(d, w(), cur.replace(/\\$/, '') + '\\' + x.name);
+      const nameCell = h('td', { class: 'fe-name' }, ico(x.dir ? 'folder' : (/\.exe$/i.test(x.name) ? 'run' : 'txt'), 18));
+      if (renaming === x.key) nameCell.append(renameBox(x, path)); else nameCell.append(h('span', { text: x.name }));
+      const tr = h('tr', { class: 'fe-row' + (sel === path ? ' sel' : ''), tabindex: '0', 'data-name': x.name,
+        onclick: e => { if (renaming) return; if (e.pointerType && e.pointerType !== 'mouse' && sel === path) { openItem(x, path); return; } sel = path; drawMain(); const r = main.querySelector('.fe-row.sel'); if (r) r.focus(); },
+        ondblclick: () => { if (!renaming) openItem(x, path); },
+        oncontextmenu: e => { e.preventDefault(); sel = path; drawMain(); itemMenu(e, x, path); },
+        onkeydown: e => { if (renaming) return; if (e.key === 'Enter') openItem(x, path); else if (e.key === 'F2') startRename(path); else if (e.key === 'Delete') del(path); else if (e.key === 'Backspace') up(); } },
+        nameCell, h('td', { text: fmtTime(x.t) || (x.sys ? fmtTime(w().installed || 0) : '') }), h('td', { text: x.dir ? 'File folder' : ftype(x.name) }), h('td', { class: 'num', text: x.dir ? '' : fsize(x.size) }));
+      bd.append(tr);
+    }
+    if (!list.length) bd.append(h('tr', null, h('td', { colspan: 4, class: 'fe-empty', text: filter ? 'No items match your search.' : 'This folder is empty.' })));
+    main.append(tbl);
+    status.textContent = list.length + ' item' + (list.length === 1 ? '' : 's') + (sel ? '    1 item selected' : '');
+    const ri = main.querySelector('.fe-ren'); if (ri) { ri.focus(); const dot = ri.value.lastIndexOf('.'); ri.setSelectionRange(0, dot > 0 && !ri.dataset.dir ? dot : ri.value.length); }
+  }
+  function dataBytes(v) { if (!v.p.data) return 0; return Object.values(v.p.data.files).reduce((s, t) => s + String(t || '').length, 0); }
+  function openItem(x, path) { if (x.dir) go(path); else openFile(path); }
+  function openFile(path) {
+    if (/\.exe$/i.test(path)) { WX.runExe(D, path); return; }
+    if (/\.html?$/i.test(path)) { D.open('notepad', path); return; }
+    D.open('notepad', path);
+  }
+  /* ----- create / rename / delete ----- */
+  function withAccess(isFile, fn) {
+    const l = loc(d, w(), cur); const g = l && !l.missing ? guard(D, l, l.key, isFile) : null;
+    if (g === 'deny') { D.msg('Destination Folder Access Denied', 'You need permission to perform this action.', 'err'); return; }
+    if (g === 'admin') { D.msg('Destination Folder Access Denied', 'You\'ll need to provide administrator permission to ' + (isFile ? 'create a file' : 'create a folder') + ' in this folder.', 'warn', [['Continue', () => { D.elevate('File Explorer', fn); }, { pri: true }], ['Cancel']]); return; }
+    fn();
+  }
+  function newFolder() {
+    withAccess(false, () => {
+      const name = FS.uniqueName(d, w(), cur, 'New folder');
+      const r = FS.mkdir(d, w(), cur, name); if (r.err) { D.msg('File Explorer', 'Folder tidak bisa dibuat.', 'err'); return; }
+      D.changed(); sel = FS.disp(d, w(), cur.replace(/\\$/, '') + '\\' + name); renaming = r.key; drawMain();
+    });
+  }
+  function newText() {
+    withAccess(true, () => {
+      const name = FS.uniqueName(d, w(), cur, 'New Text Document', '.txt');
+      const r = FS.writeFile(d, w(), cur.replace(/\\$/, '') + '\\' + name, ''); if (r.err) return;
+      D.changed(); sel = FS.disp(d, w(), cur.replace(/\\$/, '') + '\\' + name); renaming = r.key; drawMain();
+    });
+  }
+  function startRename(path) {
+    const l = loc(d, w(), path); if (!l || l.missing) return;
+    if (l.sys && WIN.baseDirs(w()).includes(l.key)) { D.msg('Folder Access Denied', 'You require permission from TrustedInstaller to make changes to this folder.', 'err'); return; }
+    sel = path; renaming = l.key; drawMain();
+  }
+  function renameBox(x, path) {
+    const inpt = h('input', { class: 'fe-ren', value: x.name, 'aria-label': 'Rename', spellcheck: 'false', autocomplete: 'off' });
+    if (x.dir) inpt.dataset.dir = '1';
+    const tip = h('div', { class: 'fe-tipbox', hidden: true });
+    let done = false;
+    const finish = commitIt => {
+      if (done) return; done = true;
+      const v = inpt.value.trim();
+      renaming = null;
+      if (!commitIt || v === x.name || !v) { drawMain(); return; }
+      const bad = validName(v); if (bad && bad !== 'empty') { D.msg('Rename', bad, 'err'); drawMain(); return; }
+      const r = FS.rename(d, w(), path, v);
+      if (r.err === 'exists') { D.msg(x.dir ? 'Rename Folder' : 'Rename File', 'There is already a ' + (x.dir ? 'folder' : 'file') + ' with the same name in this location.', 'warn'); drawMain(); return; }
+      if (r.err) { D.msg('Rename', 'The action can\'t be completed.', 'err'); drawMain(); return; }
+      sel = FS.disp(d, w(), cur.replace(/\\$/, '') + '\\' + v); D.changed(); drawMain();
+    };
+    inpt.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') finish(true); else if (e.key === 'Escape') finish(false); });
+    inpt.addEventListener('beforeinput', e => { if (e.data && ILLEGAL.test(e.data)) { e.preventDefault(); tip.hidden = false; tip.textContent = 'A file name can\'t contain any of the following characters: \\ / : * ? " < > |'; setTimeout(() => { tip.hidden = true; }, 3500); } });
+    inpt.addEventListener('blur', () => setTimeout(() => finish(true), 0));
+    inpt.addEventListener('click', e => e.stopPropagation());
+    inpt.addEventListener('dblclick', e => e.stopPropagation());
+    return h('span', { class: 'fe-renwrap' }, inpt, tip);
+  }
+  function del(path) {
+    const l = loc(d, w(), path); if (!l || l.missing) return;
+    if (l.sys && WIN.baseDirs(w()).includes(l.key)) { D.msg('Folder Access Denied', 'You require permission from TrustedInstaller to make changes to this folder.', 'err'); return; }
+    const pl = loc(d, w(), cur); const g = pl && !pl.missing ? guard(D, pl, pl.key, false) : null;
+    const doIt = () => { FS.remove(d, w(), path); sel = null; D.changed(); drawMain(); };
+    if (g === 'admin') { D.msg('Folder Access Denied', 'You\'ll need to provide administrator permission to delete this item.', 'warn', [['Continue', () => D.elevate('File Explorer', doIt), { pri: true }], ['Cancel']]); return; }
+    if (g === 'deny') { D.msg('Access Denied', 'You need permission to perform this action.', 'err'); return; }
+    doIt();
+  }
+  /* ----- menus ----- */
+  function menuAt(x, y, items) {
+    closeMenu();
+    const m = h('div', { class: 'w11-menu fe-menu', role: 'menu' });
+    for (const it of items) { if (!it) { m.append(h('hr')); continue; } const [label, fn, ic, dis] = it; m.append(h('button', { type: 'button', role: 'menuitem', disabled: dis || null, onclick: () => { closeMenu(); fn(); } }, ic ? ico(ic, 16) : h('span', { style: 'width:16px' }), h('span', { text: label }))); }
+    W.el.append(m);
+    const r = W.el.getBoundingClientRect(); const mr = m.getBoundingClientRect();
+    m.style.left = Math.max(4, Math.min(r.width - mr.width - 4, x - r.left)) + 'px'; m.style.top = Math.max(4, Math.min(r.height - mr.height - 4, y - r.top)) + 'px';
+    setTimeout(() => document.addEventListener('pointerdown', away, true), 0);
+  }
+  function away(e) { if (!e.target.closest('.fe-menu')) closeMenu(); }
+  function closeMenu() { const m = W.el.querySelector('.fe-menu'); if (m) m.remove(); document.removeEventListener('pointerdown', away, true); }
+  function newMenu(btnEl) { const r = btnEl.getBoundingClientRect(); menuAt(r.left, r.bottom + 2, [['Folder', newFolder, 'folder'], ['Text Document', newText, 'txt']]); }
+  function bgMenu(e) {
+    if (cur === 'pc' || cur === 'home') { menuAt(e.clientX, e.clientY, [['Refresh', () => draw(), 'refresh'], ['Disk Management', () => D.open('diskmgmt'), 'disk']]); return; }
+    menuAt(e.clientX, e.clientY, [['New folder', newFolder, 'folder'], ['New text document', newText, 'txt'], null, ['Refresh', () => draw(), 'refresh']]);
+  }
+  function itemMenu(e, x, path) { menuAt(e.clientX, e.clientY, [['Open', () => openItem(x, path), x.dir ? 'folder' : 'txt'], x.dir ? null : ['Open with Notepad', () => D.open('notepad', path), 'note'], null, ['Rename', () => startRename(path), 'rename'], ['Delete', () => del(path), 'trash']].filter((v, i, a) => v !== null || (a[i - 1] && a[i - 1] !== null))); }
+  W.el.addEventListener('keydown', e => {
+    if (renaming) return;
+    if (e.ctrlKey && e.shiftKey && (e.key === 'N' || e.key === 'n') && cur !== 'pc' && cur !== 'home') { e.preventDefault(); newFolder(); }
+    else if (e.altKey && e.key === 'ArrowUp') { e.preventDefault(); up(); }
+    else if (e.altKey && e.key === 'ArrowLeft') { e.preventDefault(); bBack.click(); }
+    else if (e.key === 'F5') { e.preventDefault(); draw(); }
+  });
+  /* drives appear/disappear when Disk Management changes the disk */
+  tick = setInterval(() => { if (!W.el.isConnected) { clearInterval(tick); return; } if (sig() !== lastSig && !renaming) draw(); }, 1200);
+  W.dispose = () => { clearInterval(tick); closeMenu(); };
+  if (start && start !== 'pc') { let p = String(start).replace(/^%systemdrive%/i, 'C:'); if (/^[a-z]:$/i.test(p)) p += '\\'; const l = loc(d, w(), p); cur = l && !l.missing && isDir(w(), l, l.key) ? dispOf(w(), l, l.key) : 'pc'; } else cur = 'pc';
+  draw();
+  return { refresh: () => { if (!renaming) draw(); }, reopen: p => { if (p) openPath(p); } };
+} };
+
+/* ===================== Notepad (Windows 11: files on C:, D:, ...) ===================== */
+A.notepad = { title: 'Untitled - Notepad', icon: 'note', single: false, w: 680, h: 440, make(D, W, path) {
+  const d = D.d; const w = () => D.w();
+  let cur = null, mod = false;
+  const ta = h('textarea', { spellcheck: 'false', style: 'flex:1;border:0;resize:none;padding:6px 8px;font:14px/1.45 Consolas,"Cascadia Mono","Courier New",monospace;outline:none;white-space:pre;overflow:auto;background:#fff;color:#1b1b1b', 'aria-label': 'Text editor' });
+  ta.addEventListener('input', () => { if (!mod) { mod = true; title(); } });
+  const mk = (t, items) => h('button', { type: 'button', text: t, onclick: () => { const m = D.modal(t, h('div', { style: 'display:flex;flex-direction:column;gap:4px' }, ...items.map(([l, fn]) => h('button', { type: 'button', class: 'wnlink', onclick: () => { m.close(); fn(); }, text: l }))), [['Close']], { width: 280 }); } });
+  W.body.append(h('div', { class: 'wn-menu' }, mk('File', [['New', () => { cur = null; ta.value = ''; mod = false; title(); }], ['Open...', openDlg], ['Save', save], ['Save As...', saveAs], ['Exit', () => W.close()]]), mk('Edit', [['Select All', () => { ta.focus(); ta.select(); }]]), mk('View', [['Word Wrap', () => { ta.style.whiteSpace = ta.style.whiteSpace === 'pre' ? 'pre-wrap' : 'pre'; }]])), ta);
+  function title() { W.setTitle((mod ? '*' : '') + (cur ? cur.split('\\').pop() : 'Untitled') + ' - Notepad'); }
+  function load(p) {
+    const t = FS.readFile(d, w(), p);
+    if (t == null) {
+      const l = loc(d, w(), p);
+      if (l && l.missing) { D.msg('Notepad', 'The system cannot find the drive specified.\n\n' + p, 'err'); return; }
+      D.msg('Notepad', 'Cannot find the ' + p + ' file.\n\nDo you want to create a new file?', 'warn', [['Yes', () => { const r = FS.writeFile(d, w(), p, ''); if (r.err) { D.msg('Notepad', 'Path does not exist.\nCheck the path and try again.', 'err'); return; } cur = FS.disp(d, w(), p); ta.value = ''; mod = false; title(); D.changed(); }, { pri: true }], ['No']]);
+      return;
+    }
+    cur = FS.disp(d, w(), p); ta.value = t; mod = false; title();
+  }
+  function write(p) {
+    const l = loc(d, w(), p);
+    if (!l) return D.msg('Save As', 'The file name is not valid. Gunakan path lengkap, contoh D:\\Tugas\\catatan.txt', 'err'), false;
+    if (l.missing) return D.msg('Save As', l.letter + '\\ is not accessible.\n\nThe system cannot find the drive specified.', 'err'), false;
+    const bad = validName(l.segs[l.segs.length - 1]); if (bad) return D.msg('Save As', bad === 'empty' ? 'The file name is not valid.' : bad, 'err'), false;
+    const doWrite = () => { const r = FS.writeFile(d, w(), p, ta.value); if (r.err) { D.msg('Save As', r.err === 'nodir' ? FS.disp(d, w(), p.replace(/\\[^\\]*$/, '')) + '\nPath does not exist.\nCheck the path and try again.' : 'The file could not be saved.', 'err'); return false; } cur = FS.disp(d, w(), p); mod = false; title(); D.changed(); return true; };
+    const pk = parentKey(l, l.key); const g = guard(D, l, pk, true);
+    if (g === 'deny') return D.msg('Save As', 'You don\'t have permission to save in this location.', 'err'), false;
+    if (g === 'admin') { D.msg('Save As', 'You don\'t have permission to save in this location. Contact the administrator to obtain permission.\n\nWould you like to save in the Documents folder instead?', 'warn', [['Yes', () => { const alt = D.home() + '\\Documents\\' + l.segs[l.segs.length - 1]; write(alt); }, { pri: true }], ['No']]); return false; }
+    return doWrite();
+  }
+  function save() { if (!cur) { saveAs(); return; } write(cur); }
+  function saveAs() {
+    const id = uid('nsa'); const p = WX.field(id, cur || D.home() + '\\Documents\\Untitled.txt', { style: 'width:100%' });
+    const ty = h('select', { id: id + 't' }, h('option', { value: 'txt', text: 'Text Documents (*.txt)' }), h('option', { value: 'all', text: 'All files (*.*)' }));
+    const vols = FS.vols(d).map(v => v.letter).join(', ');
+    D.modal('Save as', h('div', { style: 'display:flex;flex-direction:column;gap:6px' }, h('label', { for: id, text: 'File name (path lengkap):' }), p, h('label', { for: id + 't', text: 'Save as type:' }), ty, h('div', { class: 'wn-note', text: 'Drive di PC ini: ' + vols + '. Contoh: D:\\Tugas\\catatan.txt (folder Tugas harus sudah ada).' })), [['Save', () => {
+      let v = p.value.trim().replace(/\//g, '\\'); if (!/^[a-z]:\\/i.test(v)) { D.msg('Save As', 'The file name is not valid. Gunakan path lengkap, contoh D:\\Tugas\\catatan.txt', 'err'); return false; }
+      if (ty.value === 'txt' && !/\.[a-z0-9]{1,5}$/i.test(v)) v += '.txt';
+      return write(v) ? undefined : false;   /* keep the dialog open on errors, like Windows */
+    }, { pri: true }], ['Cancel']], { width: 500 });
+  }
+  function openDlg() { const id = uid('nop'); const p = WX.field(id, D.home() + '\\Documents\\', { style: 'width:100%' }); D.modal('Open', h('div', { style: 'display:flex;flex-direction:column;gap:6px' }, h('label', { for: id, text: 'File name (path lengkap):' }), p), [['Open', () => { load(p.value.trim()); }, { pri: true }], ['Cancel']], { width: 480 }); }
+  if (path) load(path); else title();
+  setTimeout(() => ta.focus(), 30);
+  W.beforeClose = () => { if (!mod) return true; D.msg('Notepad', 'Do you want to save changes to ' + (cur || 'Untitled') + '?', 'warn', [['Save', () => { save(); if (!mod) W.close(); }, { pri: true }], ['Don\'t Save', () => { mod = false; W.close(); }], ['Cancel']]); return false; };
+  return { reopen: p => { if (p) load(p); } };
+} };
+
+/* ---------- Command Prompt / PowerShell: drives, cd, dir, mkdir, type ---------- */
+W11.fsCmd = function (D, cmd, args, al, ps, getCwd, setCwd, o, admin) {
+  const d = D.d; const w = D.w(); const cwd = getCwd();
+  const resolve = a => {
+    let x = String(a || '').replace(/^["']|["']$/g, '').replace(/\//g, '\\');
+    if (/^[a-z]:$/i.test(x)) return x.toUpperCase() + '\\';
+    if (/^[a-z]:\\/i.test(x)) return x;
+    if (x.startsWith('\\')) return cwd.slice(0, 2) + x;
+    const segs = cwd.replace(/\\$/, '').split('\\');
+    for (const s of x.split('\\').filter(Boolean)) { if (s === '..') { if (segs.length > 1) segs.pop(); } else if (s !== '.') segs.push(s); }
+    return segs.length === 1 ? segs[0] + '\\' : segs.join('\\');
+  };
+  const nice = p => { const v = FS.disp(d, w, p); return /^[A-Z]:$/i.test(v) ? v + '\\' : v; };
+  if (/^[a-z]:$/i.test(cmd) && !args.length) {
+    const L0 = cmd.toUpperCase(); if (!FS.vols(d).some(v => v.letter === L0)) { o(ps ? 'Set-Location : Cannot find drive. A drive with the name \'' + L0[0] + '\' does not exist.' : 'The system cannot find the drive specified.'); return true; }
+    setCwd(L0 + '\\'); return true;
+  }
+  if (cmd === 'cd' || cmd === 'chdir' || cmd === 'set-location' || cmd === 'sl') {
+    const a = args.filter(x => x.toLowerCase() !== '/d');
+    if (!a.length) { o(cwd); return true; }
+    const p = resolve(a.join(' '));
+    const l = FS.loc(d, w, p);
+    if (!l || l.missing) { o(ps ? 'Set-Location : Cannot find drive. A drive with the name \'' + p[0] + '\' does not exist.' : 'The system cannot find the drive specified.'); return true; }
+    if (!FS.isDir(d, w, p)) { o(ps ? 'Set-Location : Cannot find path \'' + p + '\' because it does not exist.' : 'The system cannot find the path specified.'); return true; }
+    setCwd(nice(p)); return true;
+  }
+  if (cmd === 'dir' || cmd === 'ls' || cmd === 'get-childitem' || cmd === 'gci') {
+    const tgt = args.filter(x => !x.startsWith('/') && !x.startsWith('-'))[0];
+    const p = tgt ? resolve(tgt) : cwd; const r = FS.list(d, w, p);
+    if (!r) { o(ps ? 'Get-ChildItem : Cannot find path \'' + p + '\' because it does not exist.' : 'File Not Found'); return true; }
+    const v = r.loc.v; const ts = t => { const x = new Date(t || w.installed || Date.now()); const dd = String(x.getMonth() + 1).padStart(2, '0') + '/' + String(x.getDate()).padStart(2, '0') + '/' + x.getFullYear(); let hh = x.getHours(); const ap = hh >= 12 ? 'PM' : 'AM'; hh = hh % 12 || 12; return [dd, String(hh).padStart(2, '0') + ':' + String(x.getMinutes()).padStart(2, '0') + ' ' + ap]; };
+    if (ps) {
+      o('', '    Directory: ' + nice(p), '', 'Mode                 LastWriteTime         Length Name', '----                 -------------         ------ ----');
+      for (const x of r.dirs) { const [a, b] = ts(x.t); o('d-----        ' + a + '  ' + b.padStart(8) + '                ' + x.name); }
+      for (const x of r.files) { const [a, b] = ts(x.t); o('-a----        ' + a + '  ' + b.padStart(8) + ' ' + String(x.size).padStart(14) + ' ' + x.name); }
+      o('');
+    } else {
+      o(' Volume in drive ' + r.loc.letter[0] + (v.label ? ' is ' + v.label : ' has no label.'), ' Volume Serial Number is ' + (d.mach.disk.serial || 'NL00').slice(-4).toUpperCase() + '-' + r.loc.letter[0] + '1C2', '', ' Directory of ' + nice(p), '');
+      const lines = []; let bytes = 0;
+      for (const x of r.dirs) { const [a, b] = ts(x.t); lines.push(a + '  ' + b + '    <DIR>          ' + x.name); }
+      for (const x of r.files) { const [a, b] = ts(x.t); bytes += x.size; lines.push(a + '  ' + b + ' ' + x.size.toLocaleString('en-US').padStart(17) + ' ' + x.name); }
+      lines.forEach(x => o(x));
+      const free = Math.max(0, (v.size - v.used) * 1048576);
+      o(String(r.files.length).padStart(16) + ' File(s) ' + bytes.toLocaleString('en-US').padStart(14) + ' bytes', String(r.dirs.length).padStart(16) + ' Dir(s)  ' + free.toLocaleString('en-US').padStart(18) + ' bytes free', '');
+    }
+    return true;
+  }
+  if (cmd === 'mkdir' || cmd === 'md' || (cmd === 'new-item' && /directory/i.test(al.join(' ')))) {
+    let names = args.filter(x => !x.startsWith('-') && !/^directory$/i.test(x));
+    if (cmd === 'new-item') { const pi = al.findIndex(x => x === '-path' || x === '-name'); if (pi >= 0) names = [args[pi + 1]]; }
+    if (!names.length) { o(ps ? 'cmdlet New-Item: missing -Path' : 'The syntax of the command is incorrect.'); return true; }
+    for (const n of names) {
+      const full = resolve(n); const l = FS.loc(d, w, full);
+      if (!l || l.missing) { o('The system cannot find the drive specified.'); continue; }
+      if (!l.segs.length) { o('A subdirectory or file ' + n + ' already exists.'); continue; }
+      const name = l.segs[l.segs.length - 1]; const bad = validName(name); if (bad) { o('The filename, directory name, or volume label syntax is incorrect.'); continue; }
+      const parent = full.replace(/\\[^\\]*$/, ''); const parentP = /^[a-z]:$/i.test(parent) ? parent + '\\' : parent;
+      if (FS.isDir(d, w, full) || FS.isFile(d, w, full)) { o(ps ? 'New-Item : An item with the specified name ' + nice(full) + ' already exists.' : 'A subdirectory or file ' + n + ' already exists.'); continue; }
+      const pl = FS.loc(d, w, parentP); const g = pl && !pl.missing ? guard(D, pl, pl.key, false) : null;
+      if (g === 'deny' || (g === 'admin' && !admin)) { o(ps ? 'New-Item : Access to the path \'' + nice(full) + '\' is denied.' : 'Access is denied.'); continue; }
+      /* mkdir creates missing parents, like cmd with extensions enabled */
+      const segs = l.segs; let base = l.letter + '\\';
+      for (const s of segs) { const nx = base.replace(/\\$/, '') + '\\' + s; if (!FS.isDir(d, w, nx)) { const rr = FS.mkdir(d, w, base, s); if (rr.err) break; } base = nx; }
+      if (ps) o('', '    Directory: ' + nice(parentP), '', 'Mode                 LastWriteTime         Length Name', '----                 -------------         ------ ----', 'd-----        ' + fmtTime(Date.now()).padEnd(22) + '                ' + name, '');
+    }
+    L().changed(); return true;
+  }
+  if (cmd === 'type' || cmd === 'cat' || cmd === 'get-content' || cmd === 'gc') {
+    const f = args.filter(x => !x.startsWith('-'))[0]; if (!f) { o('The syntax of the command is incorrect.'); return true; }
+    const t = FS.readFile(d, w, resolve(f)); if (t == null) { o(ps ? 'Get-Content : Cannot find path \'' + resolve(f) + '\' because it does not exist.' : 'The system cannot find the file specified.'); return true; }
+    t.split('\n').forEach(x => o(x)); return true;
+  }
+  if (cmd === 'rmdir' || cmd === 'rd') {
+    const f = args.filter(x => !x.startsWith('/'))[0]; if (!f) { o('The syntax of the command is incorrect.'); return true; }
+    const full = resolve(f); if (!FS.isDir(d, w, full)) { o('The system cannot find the file specified.'); return true; }
+    const r = FS.list(d, w, full); if ((r.dirs.length || r.files.length) && !al.includes('/s')) { o('The directory is not empty.'); return true; }
+    const rr = FS.remove(d, w, full); if (rr.err === 'system') { o('Access is denied.'); return true; }
+    L().changed(); return true;
+  }
+  return false;
+};
 })();
 /* ===================== NetLab: Ubuntu 24.04 LTS (live USB + installer, GDM, GNOME desktop and apps) ===================== */
 (function () {

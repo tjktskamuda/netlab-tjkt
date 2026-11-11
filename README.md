@@ -37,14 +37,15 @@ Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi ro
 - PC OS & Laptop OS (disk NVMe kosong, firmware UEFI dengan Secure Boot dan TPM 2.0), colokkan flashdisk installer:
   - Layar POST, **UEFI Setup** (F2: info hardware, Secure Boot, TPM, Wi-Fi, USB boot, urutan boot), **Boot Menu** (F12), "Boot Device Not Found", GRUB
   - **Windows 11 24H2**: Windows Setup (bahasa, keyboard, setup option, product key, edisi Home/Pro/Education, lisensi, pilih/buat/hapus/format partisi, cek TPM 2.0), lalu OOBE (region, keyboard, jaringan & Wi-Fi, nama perangkat, akun lokal, password, pertanyaan keamanan, privasi); layar kunci, sign-in (lokal dan domain), desktop dengan taskbar tengah, Start, Quick Settings, Win+X, UAC
-  - Aplikasi Windows 11: Settings (About/rename, Network & internet dengan Edit IP/DNS, Wi-Fi, Accounts, Access work or school, Windows Update), Terminal (PowerShell & Command Prompt: `ipconfig /all`, `netsh`, `nslookup`, `ssh user@host`, `curl`, cmdlet `Get-NetIPAddress`, `Test-NetConnection`, `Resolve-DnsName`, `Add-Computer`, dll.), Microsoft Edge, Outlook, File Explorer, Notepad, Disk Management (Shrink/Extend/New/Delete/Format), Network Connections, System Properties, Windows Defender Firewall, Control Panel, Run
+  - Aplikasi Windows 11: Settings (About/rename, Network & internet dengan Edit IP/DNS, Wi-Fi, Accounts, Access work or school, Windows Update), Terminal (PowerShell & Command Prompt: `ipconfig /all`, `netsh`, `nslookup`, `ssh user@host`, `curl`, cmdlet `Get-NetIPAddress`, `Test-NetConnection`, `Resolve-DnsName`, `Add-Computer`, dll.), Microsoft Edge, Outlook, File Explorer (This PC dengan drive C: dan D:, buat/ganti nama/hapus folder, alamat & pencarian), Notepad (simpan ke C: atau D:), Disk Management (Shrink/Extend/New/Delete/Format), Network Connections, System Properties, Windows Defender Firewall, Control Panel, Run
+  - Drive **D:** dibuat lewat Disk Management (Shrink C: → New Simple Volume); isinya tetap ada walau Windows diinstal ulang di C:. Command Prompt mendukung `D:`, `cd`, `dir`, `mkdir`, `rmdir`, `type`
   - **Join domain** Active Directory Windows Server (Windows 11 Pro/Education), login `DOMAIN\user`, password wajib ganti, akun cache; komputer tampil di ADUC
   - **Ubuntu 24.04.1 LTS**: GRUB flashdisk, sesi live, installer gaya baru (bahasa, aksesibilitas, keyboard, internet/Wi-Fi, interaktif, aplikasi, driver, *Install alongside Windows* dengan penggeser ukuran, *Erase disk*, *Manual partitioning*, akun, zona waktu, review, slideshow + log), lalu GDM, desktop GNOME 46 (top bar, dock, Quick Settings, menu daya, kunci layar)
   - Aplikasi Ubuntu: Terminal (bash + `ip`, `nmcli`, `resolvectl`, `netplan`, `lsblk`, `fdisk -l`, `efibootmgr`, `update-grub`, `os-prober`, apt), Settings (Wi-Fi, Network dengan IPv4 Manual/DNS, Appearance, About/rename, Date & Time), Files, Text Editor, Firefox, Thunderbird, Disks
   - **Dual boot** kedua urutan (Windows dulu lalu Ubuntu, atau sebaliknya), partisi EFI bersama, urutan boot UEFI (NVRAM), os-prober & `GRUB_DISABLE_OS_PROBER`
   - Bekerja sebagai klien: DHCP/IP statis lewat kabel atau Wi-Fi (WPA2), DNS, web, email, SSH, Windows Firewall memblokir ping masuk
 - Mode Simulasi untuk melihat paket berjalan
-- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, Windows Server, Web & Mail Server, dan Klien Windows 11 & Ubuntu (Dual Boot)), simpan otomatis, ekspor/impor proyek (.json)
+- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, Windows Server, Web & Mail Server, dan Klien Windows 11 & Ubuntu (Dual Boot)), simpan otomatis per **profil siswa** (pilih nama + PIN saat membuka; pekerjaan tiap siswa terpisah di perangkat bersama, mode tamu, keluar otomatis setelah 30 menit tidak aktif), ekspor/impor proyek (.json)
 - Bisa dipasang sebagai aplikasi dan dipakai tanpa internet
 
 ## Cara memasang di HP
@@ -70,7 +71,7 @@ Setelah dipasang, buka aplikasi sekali saat online supaya semua berkas tersimpan
 
 ## Memperbarui aplikasi
 
-Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v9`) agar HP siswa ikut memperbarui salinan offline-nya.
+Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v10`) agar HP siswa ikut memperbarui salinan offline-nya.
 
 ## Struktur berkas
 
