@@ -360,33 +360,6 @@ textarea.inp { font-family: var(--f-mono); font-size: 12.5px; resize: vertical; 
   .lab .btn { justify-self: start; grid-row: 3; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-/* ---------- profil siswa (gerbang masuk) ---------- */
-.gate { position: fixed; inset: 0; z-index: 10000; background: var(--bg); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px)); overflow: auto; }
-.gate-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); width: min(460px, 100%); padding: 22px 20px 18px; display: flex; flex-direction: column; gap: 12px; }
-.gate-card h1 { margin: 0; font-size: 20px; line-height: 1.25; }
-.gate-card .lead { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
-.gate-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--accent); font-size: 13px; letter-spacing: .02em; }
-.gate-brand img { width: 26px; height: 26px; }
-.gate-list { display: flex; flex-direction: column; gap: 6px; max-height: min(320px, 42vh); overflow: auto; }
-.gate-user { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; color: var(--ink); min-height: 48px; }
-.gate-user:hover, .gate-user:focus-visible { border-color: var(--accent); }
-.gate-user b { display: block; font-size: 14.5px; }
-.gate-user small { color: var(--muted); font-size: 12px; }
-.gate-av { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 16%, var(--panel)); color: var(--accent); font-weight: 700; }
-.gate-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.gate-row .btn { margin: 0; flex: 1 1 140px; min-height: 40px; }
-.gate-f { display: flex; flex-direction: column; gap: 4px; }
-.gate-f label { font-size: 12.5px; font-weight: 600; }
-.gate-f .inp { font-family: inherit; font-size: 15px; padding: 9px 10px; }
-.gate-err { color: var(--bad); font-size: 13px; min-height: 1em; margin: 0; }
-.gate-note { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.45; border-top: 1px solid var(--line); padding-top: 10px; }
-.gate-link { background: none; border: 0; color: var(--accent); padding: 4px 0; font-size: 13px; align-self: flex-start; text-decoration: underline; }
-.gate-link.danger { color: var(--bad); }
-.user-chip { display: inline-flex; align-items: center; gap: 6px; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px 3px 3px; color: var(--ink); font-size: 13px; max-width: 180px; min-height: 32px; }
-.user-chip .gate-av { width: 26px; height: 26px; font-size: 12px; }
-.user-chip span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-chip.guest .gate-av { background: color-mix(in srgb, var(--warn) 22%, var(--panel)); color: var(--ink); }
-@media (max-width: 560px) { .user-chip { padding: 3px; } .user-chip span:last-child { display: none; } }
 </style>
 <style>
 /* ===== Winbox simulator (fixed light look, like the desktop tool) ===== */
@@ -10956,198 +10929,47 @@ const UI = { tool: 'select', sim: false, ports: true, cat: 'dev', pending: null,
 let pduSeq = 0;
 
 function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } return null; }
-
-/* ---------- profil siswa: pekerjaan tiap siswa terpisah di perangkat/browser bersama ----------
-   Semua data tetap lokal (localStorage). Kunci per profil: netlab.u.<id>.autosave / .projects.
-   Mode tamu memakai sessionStorage (hilang saat browser ditutup). */
-const PROFILE = { cur: null, fails: 0, lockUntil: 0, last: Date.now() };
-const IDLE_MIN = 30;
-function storageOk() { try { const k = 'netlab.__t'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } }
-function sess(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) { return null; } return null; }
-function pinHash(id, pin) { /* cyrb53 — cukup untuk menjaga dari teman sekelas, bukan pengaman kriptografis */
-  const str = 'netlab:' + id + ':' + pin; let h1 = 0xdeadbeef ^ 7, h2 = 0x41c6ce57 ^ 7;
-  for (let i = 0; i < str.length; i++) { const ch = str.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
-}
-function profiles() { try { const L = JSON.parse(store('netlab.users') || '[]'); return Array.isArray(L) ? L : []; } catch (e) { return []; } }
-function saveProfiles(L) { store('netlab.users', JSON.stringify(L)); }
-/* per-profile storage (guest → sessionStorage) */
-function uget(k) { const c = PROFILE.cur; if (!c) return null; return c.guest ? sess('netlab.guest.' + k) : store('netlab.u.' + c.id + '.' + k); }
-function uset(k, v) {
-  const c = PROFILE.cur; if (!c) return false;
-  try { if (c.guest) sessionStorage.setItem('netlab.guest.' + k, v); else localStorage.setItem('netlab.u.' + c.id + '.' + k, v); return true; } catch (e) { return false; }
-}
-/* data from before profiles existed (one shared autosave/projects per browser) → its own "Data lama" profile */
-function migrateLegacy() {
-  if (!storageOk() || store('netlab.migrated')) return;
-  const a = store('netlab.autosave'), p = store('netlab.projects');
-  let hasP = false; try { hasP = Object.keys(JSON.parse(p || '{}') || {}).length > 0; } catch (e) { }
-  if (a || hasP) {
-    const L = profiles();
-    if (!L.some(u => u.id === 'lama')) L.push({ id: 'lama', name: 'Data lama perangkat ini', kelas: 'sebelum pembaruan', legacy: true, t: Date.now() });
-    saveProfiles(L);
-    if (a) store('netlab.u.lama.autosave', a);
-    if (p) store('netlab.u.lama.projects', p);
+/* Versi sebelumnya sempat memisahkan pekerjaan per profil siswa ber-PIN (netlab.users, netlab.u.<id>.*).
+   Fitur itu dicabut: semua pekerjaan dikembalikan ke penyimpanan biasa di perangkat ini agar tidak ada yang hilang. */
+function unmigrateProfiles() {
+  const ss = (k, del) => { try { if (del) sessionStorage.removeItem(k); else return sessionStorage.getItem(k); } catch (e) { } return null; };
+  const parse = v => { try { return JSON.parse(v || 'null'); } catch (e) { return null; } };
+  const sid = ss('netlab.session');
+  const gAuto = parse(ss('netlab.guest.autosave')), gProj = parse(ss('netlab.guest.projects'));
+  const dropSess = () => ['netlab.session', 'netlab.guest.autosave', 'netlab.guest.projects'].forEach(k => ss(k, true));
+  let keys = [];
+  try { for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i)); } catch (e) { return; }
+  const ukeys = keys.filter(k => /^netlab\.u\.[^.]+\.(autosave|projects)$/.test(k));
+  const meta = ['netlab.users', 'netlab.migrated'].filter(k => keys.includes(k));
+  if (!ukeys.length && !meta.length && !gAuto && !gProj) { dropSess(); return; }
+  const users = (a => Array.isArray(a) ? a : [])(parse(store('netlab.users')));
+  const nameOf = id => id === 'lama' ? 'data lama' : id === 'guest' ? 'tamu' : ((users.find(u => u.id === id) || {}).name || id);
+  const timeOf = id => id === sid ? Infinity : ((users.find(u => u.id === id) || {}).t || 0);
+  const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+  const prevList = store('netlab.projects'), prevAuto = store('netlab.autosave');
+  const list = (o => o && typeof o === 'object' ? o : {})(parse(prevList));
+  const put = (name, v, owner) => { let n = has(list, name) ? name + ' (' + owner + ')' : name, i = 2; const b = n; while (has(list, n)) n = b + ' ' + i++; list[n] = v; };
+  const src = {};
+  ukeys.forEach(k => { const [, , id, kind] = k.split('.'); (src[id] = src[id] || {})[kind] = parse(store(k)); });
+  if (gAuto || gProj) src.guest = { autosave: gAuto, projects: gProj };
+  let main = parse(prevAuto);
+  Object.keys(src).sort((a, b) => timeOf(b) - timeOf(a)).forEach(id => {
+    const pr = src[id].projects; if (pr && typeof pr === 'object') Object.keys(pr).forEach(n => { if (pr[n] && pr[n].data) put(n, pr[n], nameOf(id)); });
+    const a = src[id].autosave; if (!a || !a.data) return;
+    if (!main || !main.data) { main = a; return; }
+    if (Object.keys(a.data.devices || {}).length) put((a.name || 'Proyek') + ' (terakhir dibuka ' + nameOf(id) + ')', { t: Date.now(), data: a.data });
+  });
+  const backup = {}; ukeys.concat(meta).forEach(k => { backup[k] = store(k); });
+  try {
+    ukeys.concat(meta).forEach(k => localStorage.removeItem(k));
+    localStorage.setItem('netlab.projects', JSON.stringify(list));
+    if (main && main.data) localStorage.setItem('netlab.autosave', JSON.stringify(main));
+    dropSess();
+  } catch (e) {
+    /* penyimpanan penuh: biarkan data seperti sebelumnya, dicoba lagi saat dibuka berikutnya */
+    Object.keys(backup).forEach(k => { if (backup[k] != null) store(k, backup[k]); });
+    store('netlab.projects', prevList); store('netlab.autosave', prevAuto);
   }
-  store('netlab.autosave', null); store('netlab.projects', null); store('netlab.migrated', '1');
-}
-function initials(n) { return String(n || '?').trim().split(/\s+/).slice(0, 2).map(x => x[0]).join('').toUpperCase() || '?'; }
-function renderUser() {
-  let chip = $('#userChip');
-  if (!chip) { chip = h('button', { class: 'user-chip', id: 'userChip', type: 'button', onclick: e => userMenu(e.currentTarget) }); const pn = $('#projName'); pn.after(chip); }
-  const c = PROFILE.cur; chip.hidden = !c; if (!c) return;
-  chip.classList.toggle('guest', !!c.guest); chip.textContent = '';
-  chip.append(h('span', { class: 'gate-av', text: c.guest ? 'T' : initials(c.name) }), h('span', { text: c.guest ? 'Tamu' : c.name }));
-  chip.title = c.guest ? 'Mode tamu — pekerjaan hilang saat browser ditutup' : 'Masuk sebagai ' + c.name + (c.kelas ? ' (' + c.kelas + ')' : '');
-  chip.setAttribute('aria-label', 'Akun: ' + (c.guest ? 'Tamu' : c.name));
-}
-function userMenu(anchor) {
-  const c = PROFILE.cur; if (!c) return;
-  const r = anchor.getBoundingClientRect();
-  const it = (label, fn, cls) => h('button', { class: 'mi' + (cls ? ' ' + cls : ''), role: 'menuitem', onclick: () => { closePop(); fn(); }, text: label });
-  openPop(r.right - 220, r.bottom + 6, h('div', { style: 'min-width:220px' },
-    h('div', { style: 'padding:8px 12px;font-size:12.5px;color:var(--muted)', text: c.guest ? 'Mode tamu (tidak disimpan permanen)' : 'Masuk sebagai ' + c.name + (c.kelas ? ' · ' + c.kelas : '') }),
-    c.guest || c.legacy ? null : it('Ganti PIN', changePin),
-    it('Keluar', logout)));
-}
-function login(u, quiet) {
-  PROFILE.cur = u; PROFILE.last = Date.now();
-  sess('netlab.session', u.guest ? 'guest' : u.id);
-  if (!u.guest) { const L = profiles(); const x = L.find(v => v.id === u.id); if (x) { x.t = Date.now(); saveProfiles(L); } }
-  closeGate(); renderUser();
-  let saved = null; try { saved = JSON.parse(uget('autosave') || 'null'); } catch (e) { saved = null; }
-  let ok = false;
-  if (saved && saved.data) { try { loadProject(saved.data, saved.name, saved.pdus); ok = true; } catch (e) { ok = false; } }
-  if (!ok) { const sm = NL.SAMPLES.find(x => x.id === 'router'); loadProject(sm.build(), sm.title); }
-  renderPdu();
-  if (!quiet) toast(u.guest ? 'Mode tamu: simpan hasil dengan Ekspor sebelum menutup browser' : 'Halo, ' + u.name + '! Pekerjaanmu tersimpan terpisah di perangkat ini.', 3600);
-}
-function logout(reason) {
-  if (PROFILE.cur) { clearTimeout(saveT); autosave(); }
-  PROFILE.cur = null; sess('netlab.session', null);
-  loadProject(NL.newProject(), 'Proyek tanpa nama'); renderPdu(); renderUser();
-  showGate(reason);
-}
-function changePin() {
-  const c = PROFILE.cur; if (!c || c.guest) return;
-  const f = (id, label) => h('div', { class: 'gate-f' }, h('label', { for: id, text: label }), h('input', { class: 'inp', id, type: 'password', inputmode: 'numeric', maxlength: 6, autocomplete: 'off' }));
-  const er = h('p', { class: 'gate-err', role: 'alert' });
-  modal('Ganti PIN', [f('pinOld', 'PIN lama'), f('pinNew', 'PIN baru (4–6 angka)'), f('pinNew2', 'Ulangi PIN baru'), er], [
-    h('button', { class: 'btn sec', onclick: closeModal, text: 'Batal' }),
-    h('button', { class: 'btn', onclick: () => {
-      const L = profiles(); const x = L.find(v => v.id === c.id);
-      const o = $('#pinOld').value, n = $('#pinNew').value, n2 = $('#pinNew2').value;
-      if (!x || x.pin !== pinHash(x.id, o)) { er.textContent = 'PIN lama salah.'; return; }
-      if (!/^\d{4,6}$/.test(n)) { er.textContent = 'PIN baru harus 4–6 angka.'; return; }
-      if (n !== n2) { er.textContent = 'Ulangan PIN baru tidak sama.'; return; }
-      x.pin = pinHash(x.id, n); saveProfiles(L); closeModal(); toast('PIN diganti');
-    }, text: 'Simpan' })]);
-  setTimeout(() => $('#pinOld').focus(), 30);
-}
-function closeGate() { const g = $('#gate'); if (g) g.remove(); }
-function showGate(reason, view, arg) {
-  closeModal(); closePop(); closeGate();
-  const card = h('div', { class: 'gate-card', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'gateTitle' });
-  const g = h('div', { class: 'gate', id: 'gate' }, card);
-  document.body.append(g);
-  const mark = $('.brand-mark');
-  const brand = h('div', { class: 'gate-brand' }, mark ? h('img', { src: mark.src, alt: '' }) : null, 'NetLab TJKT');
-  const can = storageOk();
-  const L = profiles().sort((a, b) => (b.t || 0) - (a.t || 0));
-  const field = (id, label, o) => h('div', { class: 'gate-f' }, h('label', { for: id, text: label }), h('input', Object.assign({ class: 'inp', id, autocomplete: 'off' }, o || {})));
-  const er = h('p', { class: 'gate-err', role: 'alert' });
-  const note = h('p', { class: 'gate-note', text: 'Pekerjaan disimpan hanya di browser perangkat ini, terpisah untuk setiap siswa dan dilindungi PIN. Tidak ada yang dikirim ke internet. Untuk pindah perangkat atau mengumpulkan tugas, pakai menu Ekspor.' });
-  view = view || 'list';
-  if (view === 'list') {
-    card.append(brand, h('h1', { id: 'gateTitle', text: 'Siapa yang memakai NetLab?' }));
-    if (reason) card.append(h('p', { class: 'lead', style: 'color:var(--warn)', text: reason }));
-    if (!can) card.append(h('p', { class: 'lead', text: 'Penyimpanan browser tidak tersedia (mungkin mode penyamaran). Kamu tetap bisa memakai mode tamu dan menyimpan hasil lewat Ekspor.' }));
-    else if (L.length) {
-      card.append(h('p', { class: 'lead', text: 'Pilih namamu lalu masukkan PIN. Belum punya? Buat profil baru.' }));
-      const list = h('div', { class: 'gate-list' });
-      for (const u of L) list.append(h('button', { class: 'gate-user', type: 'button', onclick: () => showGate(null, 'pin', u) },
-        h('span', { class: 'gate-av', text: u.legacy ? '…' : initials(u.name) }), h('span', null, h('b', { text: u.name }), h('small', { text: (u.kelas ? u.kelas + ' · ' : '') + (u.t ? 'terakhir ' + new Date(u.t).toLocaleDateString('id-ID') : '') }))));
-      card.append(list);
-    } else card.append(h('p', { class: 'lead', text: 'Buat profil dulu supaya pekerjaanmu tidak tercampur dengan siswa lain yang memakai perangkat ini.' }));
-    card.append(h('div', { class: 'gate-row' },
-      can ? h('button', { class: 'btn', type: 'button', onclick: () => showGate(null, 'new'), text: '+ Siswa baru' }) : null,
-      h('button', { class: 'btn sec', type: 'button', onclick: () => login({ guest: true, id: 'guest', name: 'Tamu' }), text: 'Mode tamu' })), note);
-    setTimeout(() => { const b = card.querySelector('.gate-user, .btn'); if (b) b.focus(); }, 30);
-  } else if (view === 'new') {
-    const nm = field('gName', 'Nama', { maxlength: 40, autocapitalize: 'words', placeholder: 'contoh: Budi Santoso' });
-    const kl = field('gKelas', 'Kelas (boleh dikosongkan)', { maxlength: 24, placeholder: 'contoh: XI TJKT 1' });
-    const p1 = field('gPin', 'Buat PIN (4–6 angka)', { type: 'password', inputmode: 'numeric', maxlength: 6 });
-    const p2 = field('gPin2', 'Ulangi PIN', { type: 'password', inputmode: 'numeric', maxlength: 6 });
-    const go = () => {
-      const name = $('#gName').value.trim().replace(/\s+/g, ' '), kelas = $('#gKelas').value.trim(), pin = $('#gPin').value, pin2 = $('#gPin2').value;
-      if (name.length < 2) { er.textContent = 'Isi namamu (minimal 2 huruf).'; $('#gName').focus(); return; }
-      const Ls = profiles();
-      if (Ls.some(u => u.name.toLowerCase() === name.toLowerCase() && (u.kelas || '').toLowerCase() === kelas.toLowerCase())) { er.textContent = 'Profil dengan nama dan kelas itu sudah ada di perangkat ini. Pilih dari daftar, atau tambahkan nama lengkap.'; return; }
-      if (!/^\d{4,6}$/.test(pin)) { er.textContent = 'PIN harus 4–6 angka.'; $('#gPin').focus(); return; }
-      if (pin !== pin2) { er.textContent = 'Ulangan PIN tidak sama.'; $('#gPin2').focus(); return; }
-      const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-      const u = { id, name, kelas, pin: pinHash(id, pin), t: Date.now() };
-      Ls.push(u); saveProfiles(Ls); login(u);
-    };
-    card.append(brand, h('h1', { id: 'gateTitle', text: 'Profil siswa baru' }), nm, kl, p1, p2, er,
-      h('div', { class: 'gate-row' }, h('button', { class: 'btn sec', type: 'button', onclick: () => showGate(), text: 'Kembali' }), h('button', { class: 'btn', type: 'button', onclick: go, text: 'Buat & masuk' })),
-      h('p', { class: 'gate-note', text: 'Ingat PIN-mu. Guru tidak bisa melihat PIN; kalau lupa, profil hanya bisa dihapus bersama datanya lewat pengaturan browser (hapus data situs).' }));
-    card.querySelectorAll('input').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
-    setTimeout(() => $('#gName').focus(), 30);
-  } else if (view === 'pin') {
-    const u = arg;
-    const head = [brand, h('h1', { id: 'gateTitle', text: u.legacy ? u.name : 'Halo, ' + u.name }), h('p', { class: 'lead', text: u.legacy ? 'Berisi pekerjaan yang tersimpan sebelum ada profil siswa. Data ini tidak ber-PIN: buka untuk mengekspor yang masih diperlukan, lalu hapus.' : (u.kelas ? u.kelas + ' · ' : '') + 'Masukkan PIN untuk membuka pekerjaanmu.' })];
-    if (u.legacy) {
-      card.append(...head, h('div', { class: 'gate-row' }, h('button', { class: 'btn sec', type: 'button', onclick: () => showGate(), text: 'Kembali' }), h('button', { class: 'btn', type: 'button', onclick: () => login(u), text: 'Buka' })),
-        armed(h('button', { class: 'gate-link danger', type: 'button', text: 'Hapus data lama' }), 'Yakin? Klik lagi untuk menghapus data lama', () => { removeProfile(u); showGate('Data lama dihapus.'); }));
-      return;
-    }
-    const pf = field('gPinIn', 'PIN', { type: 'password', inputmode: 'numeric', maxlength: 6 });
-    const go = () => {
-      const now = Date.now();
-      if (now < PROFILE.lockUntil) { er.textContent = 'Terlalu banyak percobaan. Tunggu ' + Math.ceil((PROFILE.lockUntil - now) / 1000) + ' detik.'; return; }
-      const x = profiles().find(v => v.id === u.id);
-      if (!x) { showGate('Profil tidak ditemukan.'); return; }
-      if (x.pin !== pinHash(x.id, $('#gPinIn').value)) {
-        PROFILE.fails++; $('#gPinIn').value = ''; $('#gPinIn').focus();
-        if (PROFILE.fails >= 5) { PROFILE.fails = 0; PROFILE.lockUntil = now + 30000; er.textContent = 'PIN salah 5 kali. Tunggu 30 detik.'; }
-        else er.textContent = 'PIN salah.';
-        return;
-      }
-      PROFILE.fails = 0; login(x);
-    };
-    const del = () => {
-      const x = profiles().find(v => v.id === u.id);
-      if (!x || x.pin !== pinHash(x.id, $('#gPinIn').value)) { er.textContent = 'Masukkan PIN yang benar dulu untuk menghapus profil.'; $('#gPinIn').focus(); return; }
-      return x;
-    };
-    card.append(...head, pf, er, h('div', { class: 'gate-row' }, h('button', { class: 'btn sec', type: 'button', onclick: () => showGate(), text: 'Bukan saya' }), h('button', { class: 'btn', type: 'button', onclick: go, text: 'Masuk' })),
-      armed(h('button', { class: 'gate-link danger', type: 'button', text: 'Hapus profil ini' }), 'Yakin? Klik lagi untuk menghapus profil & semua pekerjaannya', () => { const x = del(); if (x) { removeProfile(x); showGate('Profil ' + x.name + ' dihapus.'); } }, () => !!del()));
-    card.querySelector('#gPinIn').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
-    setTimeout(() => { const i = document.getElementById('gPinIn'); if (i) i.focus(); }, 30);
-  }
-}
-/* two-step destructive link (no native confirm: it can be blocked inside sandboxed frames) */
-function armed(btn, ask, fn, pre) {
-  let t = null; const txt = btn.textContent;
-  btn.onclick = () => {
-    if (t) { clearTimeout(t); t = null; btn.textContent = txt; fn(); return; }
-    if (pre && !pre()) return;
-    btn.textContent = ask; t = setTimeout(() => { t = null; btn.textContent = txt; }, 6000);
-  };
-  return btn;
-}
-function removeProfile(u) {
-  saveProfiles(profiles().filter(v => v.id !== u.id));
-  store('netlab.u.' + u.id + '.autosave', null); store('netlab.u.' + u.id + '.projects', null);
-}
-/* keluar otomatis bila tidak ada aktivitas (perangkat lab dipakai bergantian) */
-function idleWatch() {
-  const bump = () => { PROFILE.last = Date.now(); };
-  ['pointerdown', 'keydown', 'wheel'].forEach(ev => addEventListener(ev, bump, { capture: true, passive: true }));
-  setInterval(() => { if (PROFILE.cur && !PROFILE.cur.guest && Date.now() - PROFILE.last > IDLE_MIN * 60000) logout('Kamu otomatis keluar karena tidak ada aktivitas selama ' + IDLE_MIN + ' menit. Pekerjaanmu sudah tersimpan.'); }, 30000);
 }
 
 /* ---------- toast / popover / modal ---------- */
@@ -11197,11 +11019,10 @@ function changed() {
 }
 NL.onChange = changed;
 function autosave() {
-  if (!PROFILE.cur) return;
-  uset('autosave', JSON.stringify({ name: UI.projName, data: JSON.parse(NL.serialize(P)), pdus: UI.pdus.map(p => ({ src: p.src, dst: p.dst, dstIp: p.dstIp, color: p.color })) }));
+  store('netlab.autosave', JSON.stringify({ name: UI.projName, data: JSON.parse(NL.serialize(P)), pdus: UI.pdus.map(p => ({ src: p.src, dst: p.dst, dstIp: p.dstIp, color: p.color })) }));
   UI.saved = true; renderName();
 }
-function renderName() { const n = $('#projName'); n.textContent = ''; n.append(h('span', { class: 'saved-dot', style: UI.saved ? '' : 'background:var(--warn)' }), UI.projName); n.title = UI.saved ? (PROFILE.cur && PROFILE.cur.guest ? 'Mode tamu: tersimpan sementara sampai browser ditutup' : 'Tersimpan otomatis di perangkat ini, hanya untuk profil ' + (PROFILE.cur ? PROFILE.cur.name : '')) : 'Menyimpan…'; }
+function renderName() { const n = $('#projName'); n.textContent = ''; n.append(h('span', { class: 'saved-dot', style: UI.saved ? '' : 'background:var(--warn)' }), UI.projName); n.title = UI.saved ? 'Tersimpan otomatis di perangkat ini' : 'Menyimpan…'; }
 function loadProject(data, name, pdus) {
   for (const id of Object.keys(UI.wins)) closeWin(id);
   for (const s of [...NL.IOS.sessions]) s.dispose && s.dispose();
@@ -12620,27 +12441,26 @@ function servicesPane(d) {
 function newProject() {
   confirmBox('Proyek baru', 'Area kerja akan dikosongkan. Proyek saat ini tetap ada di daftar "Buka" hanya jika sudah disimpan.', 'Kosongkan', () => { loadProject(NL.newProject(), 'Proyek baru'); P.view = { x: 0, y: 0, z: 1 }; fit(); changed(); toast('Mulai dari area kerja kosong. Pilih perangkat di bawah.'); });
 }
-function savedList() { try { return JSON.parse(uget('projects') || '{}') || {}; } catch (e) { return {}; } }
+function savedList() { try { return JSON.parse(store('netlab.projects') || '{}') || {}; } catch (e) { return {}; } }
 function saveDialog() {
   const inp = h('input', { class: 'inp', id: 'saveName', value: UI.projName });
-  const who = PROFILE.cur && PROFILE.cur.guest ? 'Mode tamu: proyek hanya bertahan sampai browser ditutup. Gunakan Ekspor untuk menyimpannya.' : 'Proyek disimpan di browser perangkat ini, hanya untuk profil ' + (PROFILE.cur ? PROFILE.cur.name : '') + '. Untuk dipindah ke perangkat lain, gunakan Ekspor.';
-  modal('Simpan proyek', [h('p', { class: 'muted', style: 'margin:0', text: who }), h('label', { class: 'cap', for: 'saveName', text: 'Nama proyek' }), inp], [
+  modal('Simpan proyek', [h('p', { class: 'muted', style: 'margin:0', text: 'Proyek disimpan di peramban perangkat ini. Untuk dipindah ke perangkat lain, gunakan Ekspor.' }), h('label', { class: 'cap', for: 'saveName', text: 'Nama proyek' }), inp], [
     h('button', { class: 'btn sec', onclick: closeModal, text: 'Batal' }),
     h('button', { class: 'btn', onclick: () => {
       const name = inp.value.trim() || 'Proyek'; const list = savedList();
       list[name] = { t: Date.now(), data: JSON.parse(NL.serialize(P)) };
-      if (uset('projects', JSON.stringify(list))) { UI.projName = name; autosave(); closeModal(); toast('Tersimpan: ' + name); }
-      else toast('Penyimpanan peramban tidak tersedia atau penuh. Gunakan Ekspor.');
+      try { localStorage.setItem('netlab.projects', JSON.stringify(list)); UI.projName = name; autosave(); closeModal(); toast('Tersimpan: ' + name); }
+      catch (e) { toast('Penyimpanan peramban tidak tersedia. Gunakan Ekspor.'); }
     }, text: 'Simpan' })]);
   setTimeout(() => inp.select(), 30);
 }
 function openDialog() {
   const list = savedList(); const names = Object.keys(list).sort((a, b) => list[b].t - list[a].t);
   const box = h('div', { style: 'display:flex;flex-direction:column;gap:8px' });
-  if (!names.length) box.append(h('div', { class: 'muted', text: PROFILE.cur && PROFILE.cur.guest ? 'Belum ada proyek tersimpan di mode tamu.' : 'Belum ada proyek tersimpan di profilmu di perangkat ini.' }));
+  if (!names.length) box.append(h('div', { class: 'muted', text: 'Belum ada proyek tersimpan di perangkat ini.' }));
   for (const n of names) box.append(h('div', { class: 'lab' }, h('h3', { text: n }), h('div', { class: 'row' },
     h('button', { class: 'btn', onclick: () => { closeModal(); loadProject(list[n].data, n); changed(); toast('Dibuka: ' + n); }, text: 'Buka' }),
-    h('button', { class: 'btn sec', onclick: () => { delete list[n]; uset('projects', JSON.stringify(list)); openDialog(); }, text: 'Hapus' })),
+    h('button', { class: 'btn sec', onclick: () => { delete list[n]; try { localStorage.setItem('netlab.projects', JSON.stringify(list)); } catch (e) { } openDialog(); }, text: 'Hapus' })),
     h('p', { text: 'Disimpan ' + new Date(list[n].t).toLocaleString('id-ID') })));
   const file = h('input', { type: 'file', id: 'impFile', accept: '.json,application/json', onchange: e => {
     const f = e.target.files[0]; if (!f) return; const rd = new FileReader();
@@ -12648,7 +12468,7 @@ function openDialog() {
     rd.readAsText(f);
   } });
   const paste = h('textarea', { class: 'inp', id: 'impPaste', rows: 4, placeholder: 'Tempel kode proyek (JSON) di sini' });
-  modal('Buka proyek', [h('div', { class: 'cap', text: PROFILE.cur && !PROFILE.cur.guest ? 'Proyek milik ' + PROFILE.cur.name : 'Tersimpan (mode tamu)' }), box,
+  modal('Buka proyek', [h('div', { class: 'cap', text: 'Tersimpan di perangkat ini' }), box,
     h('div', { class: 'cap', text: 'Dari file' }), h('div', null, h('label', { class: 'btn sec', for: 'impFile', style: 'display:inline-block;cursor:pointer', text: 'Pilih file .json' }), file),
     h('div', { class: 'cap', text: 'Atau tempel kode' }), paste,
     h('div', { class: 'row' }, h('button', { class: 'btn sec', onclick: () => { try { const j = JSON.parse(paste.value); loadProject(j.netlab ? j.data : j, j.name || 'Proyek impor'); closeModal(); changed(); } catch (e) { toast('Kode tidak valid'); } }, text: 'Buka dari kode' }))]);
@@ -12701,7 +12521,7 @@ function helpDialog() {
       h('li', { html: 'Ketuk PC untuk <b>Desktop</b>: IP Configuration, Command Prompt (ping, tracert, ipconfig, telnet, ssh, nslookup), Web Browser, Terminal (lewat kabel console).' }),
       h('li', { html: 'Saat mengisi IP, panel <b>Rincian jaringan</b> menampilkan prefix, netmask, wildcard, network, broadcast, rentang host, jumlah host, dan bentuk biner. Aplikasi <b>Kalkulator IP</b> di Desktop membantu latihan subnetting.' }),
       h('li', { html: 'Alat <b>PDU</b> (amplop) mengirim ping cepat. Mode <b>Simulasi</b> menampilkan paket berjalan per perangkat.' }),
-      h('li', { html: 'Saat dibuka, pilih <b>profil siswa</b> dan masukkan PIN. Pekerjaan tersimpan otomatis di perangkat ini, <b>terpisah untuk tiap siswa</b>; siswa lain tidak bisa membukanya. Klik nama di pojok kanan atas lalu <b>Keluar</b> setelah selesai (otomatis keluar setelah 30 menit tidak aktif). Gunakan <b>Ekspor</b> untuk mengumpulkan tugas atau pindah perangkat.' })),
+      h('li', { html: 'Pekerjaan tersimpan otomatis di perangkat ini. Gunakan <b>Ekspor</b> untuk mengumpulkan tugas atau pindah perangkat.' })),
     h('h3', { text: 'Router WiFi MikroTik & Winbox' }),
     h('ul', null,
       h('li', { html: 'Tambahkan <b>MikroTik</b> dari panel perangkat. Port: <b>ether1</b> (biasanya ke ISP), <b>ether2–ether5</b> (LAN), dan <b>wlan1</b> (Wi-Fi 2.4 GHz). Router baru membawa konfigurasi default seperti aslinya (192.168.88.1, DHCP, NAT).' }),
@@ -12804,12 +12624,12 @@ function paletteDrag(btn, type) {
 function boot() {
   buildChrome();
   if (store('netlab.ports') === '0') { UI.ports = false; $('#portTog').classList.remove('on'); }
-  migrateLegacy();
-  loadProject(NL.newProject(), 'Proyek tanpa nama'); renderPdu(); renderUser();
-  /* a reload in the same tab keeps the signed-in profile; a new browser session asks again */
-  const sid = sess('netlab.session'); const u = sid === 'guest' ? { guest: true, id: 'guest', name: 'Tamu' } : sid ? profiles().find(x => x.id === sid) : null;
-  if (u) login(u, true); else showGate();
-  idleWatch();
+  unmigrateProfiles();
+  let saved = null;
+  try { saved = JSON.parse(store('netlab.autosave') || 'null'); } catch (e) { saved = null; }
+  if (saved && saved.data) { try { loadProject(saved.data, saved.name, saved.pdus); } catch (e) { saved = null; } }
+  if (!saved || !saved.data) { const sm = NL.SAMPLES.find(x => x.id === 'router'); loadProject(sm.build(), sm.title); }
+  renderPdu();
   addEventListener('resize', () => { applyView(); });
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();

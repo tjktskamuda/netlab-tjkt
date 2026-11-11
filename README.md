@@ -45,7 +45,7 @@ Alur kerjanya mirip Packet Tracer: susun topologi, sambung kabel, konfigurasi ro
   - **Dual boot** kedua urutan (Windows dulu lalu Ubuntu, atau sebaliknya), partisi EFI bersama, urutan boot UEFI (NVRAM), os-prober & `GRUB_DISABLE_OS_PROBER`
   - Bekerja sebagai klien: DHCP/IP statis lewat kabel atau Wi-Fi (WPA2), DNS, web, email, SSH, Windows Firewall memblokir ping masuk
 - Mode Simulasi untuk melihat paket berjalan
-- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, Windows Server, Web & Mail Server, dan Klien Windows 11 & Ubuntu (Dual Boot)), simpan otomatis per **profil siswa** (pilih nama + PIN saat membuka; pekerjaan tiap siswa terpisah di perangkat bersama, mode tamu, keluar otomatis setelah 30 menit tidak aktif), ekspor/impor proyek (.json)
+- Contoh lab siap pakai (termasuk MikroTik Internet Sekolah, Hotspot & Limit Bandwidth, Internet & Server Debian 9, Windows Server, Web & Mail Server, dan Klien Windows 11 & Ubuntu (Dual Boot)), simpan otomatis, ekspor/impor proyek (.json)
 - Bisa dipasang sebagai aplikasi dan dipakai tanpa internet
 
 ## Cara memasang di HP
@@ -71,7 +71,7 @@ Setelah dipasang, buka aplikasi sekali saat online supaya semua berkas tersimpan
 
 ## Memperbarui aplikasi
 
-Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v10`) agar HP siswa ikut memperbarui salinan offline-nya.
+Ganti `index.html` dengan versi baru, lalu naikkan nama versi di baris pertama `sw.js` (misalnya `netlab-tjkt-v11`) agar HP siswa ikut memperbarui salinan offline-nya.
 
 ## Struktur berkas
 
